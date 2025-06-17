@@ -1,0 +1,154 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景渐变 -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c0c0c0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a0a0a0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="300" height="300" fill="url(#bgGradient)" rx="15"/>
+  
+  <!-- 游戏板背景 -->
+  <rect x="30" y="60" width="240" height="240" fill="url(#boardGradient)" rx="8" stroke="#808080" stroke-width="3"/>
+  
+  <!-- 网格 -->
+  <g stroke="#808080" stroke-width="1" fill="none">
+    <!-- 垂直线 -->
+    <line x1="60" y1="60" x2="60" y2="300"/>
+    <line x1="90" y1="60" x2="90" y2="300"/>
+    <line x1="120" y1="60" x2="120" y2="300"/>
+    <line x1="150" y1="60" x2="150" y2="300"/>
+    <line x1="180" y1="60" x2="180" y2="300"/>
+    <line x1="210" y1="60" x2="210" y2="300"/>
+    <line x1="240" y1="60" x2="240" y2="300"/>
+    <!-- 水平线 -->
+    <line x1="30" y1="90" x2="270" y2="90"/>
+    <line x1="30" y1="120" x2="270" y2="120"/>
+    <line x1="30" y1="150" x2="270" y2="150"/>
+    <line x1="30" y1="180" x2="270" y2="180"/>
+    <line x1="30" y1="210" x2="270" y2="210"/>
+    <line x1="30" y1="240" x2="270" y2="240"/>
+    <line x1="30" y1="270" x2="270" y2="270"/>
+  </g>
+  
+  <!-- 扫雷格子 -->
+  
+  <!-- 已翻开的数字格子 -->
+  <rect x="31" y="61" width="28" height="28" fill="#e0e0e0" stroke="#999" stroke-width="1"/>
+  <text x="45" y="80" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#0000ff">1</text>
+  
+  <rect x="61" y="61" width="28" height="28" fill="#e0e0e0" stroke="#999" stroke-width="1"/>
+  <text x="75" y="80" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#008000">2</text>
+  
+  <rect x="91" y="61" width="28" height="28" fill="#e0e0e0" stroke="#999" stroke-width="1"/>
+  <text x="105" y="80" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ff0000">3</text>
+  
+  <!-- 旗帜标记 -->
+  <rect x="121" y="61" width="28" height="28" fill="#ffa500" stroke="#666" stroke-width="2"/>
+  <text x="135" y="82" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">🚩</text>
+  
+  <rect x="151" y="61" width="28" height="28" fill="#ffa500" stroke="#666" stroke-width="2"/>
+  <text x="165" y="82" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">🚩</text>
+  
+  <!-- 未翻开的格子 -->
+  <rect x="181" y="61" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="211" y="61" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="241" y="61" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  
+  <!-- 第二行 -->
+  <rect x="31" y="91" width="28" height="28" fill="#e0e0e0" stroke="#999" stroke-width="1"/>
+  <text x="45" y="110" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#000080">4</text>
+  
+  <rect x="61" y="91" width="28" height="28" fill="#e0e0e0" stroke="#999" stroke-width="1"/>
+  
+  <rect x="91" y="91" width="28" height="28" fill="#e0e0e0" stroke="#999" stroke-width="1"/>
+  <text x="105" y="110" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#800000">5</text>
+  
+  <!-- 地雷（已爆炸） -->
+  <rect x="121" y="91" width="28" height="28" fill="#ff0000" stroke="#666" stroke-width="2"/>
+  <text x="135" y="112" font-family="Arial, sans-serif" font-size="14" text-anchor="middle">💣</text>
+  
+  <rect x="151" y="91" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="181" y="91" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="211" y="91" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="241" y="91" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  
+  <!-- 第三行 -->
+  <rect x="31" y="121" width="28" height="28" fill="#e0e0e0" stroke="#999" stroke-width="1"/>
+  <rect x="61" y="121" width="28" height="28" fill="#e0e0e0" stroke="#999" stroke-width="1"/>
+  <text x="75" y="140" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#008080">6</text>
+  
+  <rect x="91" y="121" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="121" y="121" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="151" y="121" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="181" y="121" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="211" y="121" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  <rect x="241" y="121" width="28" height="28" fill="#c0c0c0" stroke="#666" stroke-width="2"/>
+  
+  <!-- 剩余行都是未翻开的格子 -->
+  <g fill="#c0c0c0" stroke="#666" stroke-width="2">
+    <rect x="31" y="151" width="28" height="28"/>
+    <rect x="61" y="151" width="28" height="28"/>
+    <rect x="91" y="151" width="28" height="28"/>
+    <rect x="121" y="151" width="28" height="28"/>
+    <rect x="151" y="151" width="28" height="28"/>
+    <rect x="181" y="151" width="28" height="28"/>
+    <rect x="211" y="151" width="28" height="28"/>
+    <rect x="241" y="151" width="28" height="28"/>
+    
+    <rect x="31" y="181" width="28" height="28"/>
+    <rect x="61" y="181" width="28" height="28"/>
+    <rect x="91" y="181" width="28" height="28"/>
+    <rect x="121" y="181" width="28" height="28"/>
+    <rect x="151" y="181" width="28" height="28"/>
+    <rect x="181" y="181" width="28" height="28"/>
+    <rect x="211" y="181" width="28" height="28"/>
+    <rect x="241" y="181" width="28" height="28"/>
+    
+    <rect x="31" y="211" width="28" height="28"/>
+    <rect x="61" y="211" width="28" height="28"/>
+    <rect x="91" y="211" width="28" height="28"/>
+    <rect x="121" y="211" width="28" height="28"/>
+    <rect x="151" y="211" width="28" height="28"/>
+    <rect x="181" y="211" width="28" height="28"/>
+    <rect x="211" y="211" width="28" height="28"/>
+    <rect x="241" y="211" width="28" height="28"/>
+    
+    <rect x="31" y="241" width="28" height="28"/>
+    <rect x="61" y="241" width="28" height="28"/>
+    <rect x="91" y="241" width="28" height="28"/>
+    <rect x="121" y="241" width="28" height="28"/>
+    <rect x="151" y="241" width="28" height="28"/>
+    <rect x="181" y="241" width="28" height="28"/>
+    <rect x="211" y="241" width="28" height="28"/>
+    <rect x="241" y="241" width="28" height="28"/>
+    
+    <rect x="31" y="271" width="28" height="28"/>
+    <rect x="61" y="271" width="28" height="28"/>
+    <rect x="91" y="271" width="28" height="28"/>
+    <rect x="121" y="271" width="28" height="28"/>
+    <rect x="151" y="271" width="28" height="28"/>
+    <rect x="181" y="271" width="28" height="28"/>
+    <rect x="211" y="271" width="28" height="28"/>
+    <rect x="241" y="271" width="28" height="28"/>
+  </g>
+  
+  <!-- 标题 -->
+  <text x="150" y="25" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="white">💣 扫雷</text>
+  
+  <!-- 信息显示 -->
+  <rect x="20" y="35" width="50" height="20" fill="rgba(255,255,255,0.2)" rx="5"/>
+  <text x="45" y="48" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">🚩 05</text>
+  
+  <rect x="80" y="35" width="50" height="20" fill="rgba(255,255,255,0.2)" rx="5"/>
+  <text x="105" y="48" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">⏱ 025</text>
+  
+  <rect x="230" y="35" width="50" height="20" fill="rgba(255,255,255,0.2)" rx="5"/>
+  <text x="255" y="48" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">�� 10</text>
+</svg> 

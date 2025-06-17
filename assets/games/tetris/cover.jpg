@@ -1,0 +1,72 @@
+# Tetris Game Cover Image Placeholder 
+
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景渐变 -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="blockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#4ecdc4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#45b7d1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="400" height="300" fill="url(#bgGradient)"/>
+  
+  <!-- 游戏网格背景 -->
+  <rect x="80" y="40" width="240" height="220" fill="rgba(0,0,0,0.3)" rx="10"/>
+  
+  <!-- 俄罗斯方块 - T形状 -->
+  <g transform="translate(120, 80)">
+    <rect x="0" y="0" width="30" height="30" fill="#ff6b6b" stroke="#fff" stroke-width="2"/>
+    <rect x="30" y="0" width="30" height="30" fill="#ff6b6b" stroke="#fff" stroke-width="2"/>
+    <rect x="60" y="0" width="30" height="30" fill="#ff6b6b" stroke="#fff" stroke-width="2"/>
+    <rect x="30" y="30" width="30" height="30" fill="#ff6b6b" stroke="#fff" stroke-width="2"/>
+  </g>
+  
+  <!-- 俄罗斯方块 - L形状 -->
+  <g transform="translate(160, 120)">
+    <rect x="0" y="0" width="30" height="30" fill="#4ecdc4" stroke="#fff" stroke-width="2"/>
+    <rect x="0" y="30" width="30" height="30" fill="#4ecdc4" stroke="#fff" stroke-width="2"/>
+    <rect x="0" y="60" width="30" height="30" fill="#4ecdc4" stroke="#fff" stroke-width="2"/>
+    <rect x="30" y="60" width="30" height="30" fill="#4ecdc4" stroke="#fff" stroke-width="2"/>
+  </g>
+  
+  <!-- 俄罗斯方块 - 直线形状 -->
+  <g transform="translate(200, 140)">
+    <rect x="0" y="0" width="30" height="30" fill="#45b7d1" stroke="#fff" stroke-width="2"/>
+    <rect x="0" y="30" width="30" height="30" fill="#45b7d1" stroke="#fff" stroke-width="2"/>
+    <rect x="0" y="60" width="30" height="30" fill="#45b7d1" stroke="#fff" stroke-width="2"/>
+    <rect x="0" y="90" width="30" height="30" fill="#45b7d1" stroke="#fff" stroke-width="2"/>
+  </g>
+  
+  <!-- 俄罗斯方块 - 方形 -->
+  <g transform="translate(100, 180)">
+    <rect x="0" y="0" width="30" height="30" fill="#96ceb4" stroke="#fff" stroke-width="2"/>
+    <rect x="30" y="0" width="30" height="30" fill="#96ceb4" stroke="#fff" stroke-width="2"/>
+    <rect x="0" y="30" width="30" height="30" fill="#96ceb4" stroke="#fff" stroke-width="2"/>
+    <rect x="30" y="30" width="30" height="30" fill="#96ceb4" stroke="#fff" stroke-width="2"/>
+  </g>
+  
+  <!-- 游戏标题 -->
+  <text x="200" y="35" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">俄罗斯方块</text>
+  
+  <!-- 装饰性网格线 -->
+  <g stroke="rgba(255,255,255,0.2)" stroke-width="1">
+    <line x1="110" y1="50" x2="110" y2="250"/>
+    <line x1="140" y1="50" x2="140" y2="250"/>
+    <line x1="170" y1="50" x2="170" y2="250"/>
+    <line x1="200" y1="50" x2="200" y2="250"/>
+    <line x1="230" y1="50" x2="230" y2="250"/>
+    <line x1="260" y1="50" x2="260" y2="250"/>
+    <line x1="290" y1="50" x2="290" y2="250"/>
+  </g>
+  
+  <!-- 底部装饰 -->
+  <circle cx="50" cy="280" r="15" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="350" cy="280" r="15" fill="rgba(255,255,255,0.1)"/>
+</svg> 

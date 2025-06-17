@@ -1,0 +1,90 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景渐变 -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="300" height="300" fill="url(#bgGradient)" rx="15"/>
+  
+  <!-- 卡片网格 4x4 -->
+  
+  <!-- 第一行 -->
+  <!-- 翻开的卡片 -->
+  <rect x="40" y="60" width="45" height="45" fill="white" rx="8" stroke="#ccc" stroke-width="2"/>
+  <text x="62.5" y="90" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">🐶</text>
+  
+  <rect x="95" y="60" width="45" height="45" fill="white" rx="8" stroke="#ccc" stroke-width="2"/>
+  <text x="117.5" y="90" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">🐱</text>
+  
+  <!-- 背面卡片 -->
+  <rect x="150" y="60" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="172.5" y="90" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <rect x="205" y="60" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="227.5" y="90" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <!-- 第二行 -->
+  <rect x="40" y="115" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="62.5" y="145" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <rect x="95" y="115" width="45" height="45" fill="white" rx="8" stroke="#ccc" stroke-width="2"/>
+  <text x="117.5" y="145" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">🦊</text>
+  
+  <rect x="150" y="115" width="45" height="45" fill="white" rx="8" stroke="#ccc" stroke-width="2"/>
+  <text x="172.5" y="145" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">🐻</text>
+  
+  <rect x="205" y="115" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="227.5" y="145" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <!-- 第三行 -->
+  <rect x="40" y="170" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="62.5" y="200" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <rect x="95" y="170" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="117.5" y="200" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <rect x="150" y="170" width="45" height="45" fill="white" rx="8" stroke="#ccc" stroke-width="2"/>
+  <text x="172.5" y="200" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">🐸</text>
+  
+  <rect x="205" y="170" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="227.5" y="200" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <!-- 第四行 -->
+  <rect x="40" y="225" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="62.5" y="255" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <rect x="95" y="225" width="45" height="45" fill="white" rx="8" stroke="#ccc" stroke-width="2"/>
+  <text x="117.5" y="255" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">🐱</text>
+  
+  <rect x="150" y="225" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="172.5" y="255" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <rect x="205" y="225" width="45" height="45" fill="url(#cardGradient)" rx="8" stroke="white" stroke-width="3"/>
+  <text x="227.5" y="255" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">?</text>
+  
+  <!-- 标题 -->
+  <text x="150" y="25" font-family="Arial, sans-serif" font-size="22" font-weight="bold" text-anchor="middle" fill="white">🧠 翻牌记忆</text>
+  
+  <!-- 游戏信息 -->
+  <rect x="20" y="35" width="60" height="18" fill="rgba(255,255,255,0.2)" rx="5"/>
+  <text x="50" y="47" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">翻牌: 8</text>
+  
+  <rect x="90" y="35" width="60" height="18" fill="rgba(255,255,255,0.2)" rx="5"/>
+  <text x="120" y="47" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">配对: 3</text>
+  
+  <rect x="160" y="35" width="60" height="18" fill="rgba(255,255,255,0.2)" rx="5"/>
+  <text x="190" y="47" font-family="Arial, sans-serif" font-size="11" font-weight="bold" text-anchor="middle" fill="white">时间: 1:23</text>
+  
+  <!-- 匹配指示线 -->
+  <path d="M 62.5 105 Q 117.5 130 117.5 270" stroke="#4CAF50" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+  <circle cx="62.5" cy="82.5" r="3" fill="#4CAF50"/>
+  <circle cx="117.5" cy="247.5" r="3" fill="#4CAF50"/>
+</svg> 

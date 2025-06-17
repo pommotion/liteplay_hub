@@ -76,6 +76,86 @@ const allGames = [
         imageUrl: 'assets/games/flappy/cover.svg',
         gameUrl: 'game.html?game=flappy',
         gameFileUrl: 'assets/games/flappy/index.html'
+    },
+    {
+        id: '2048',
+        name: '2048数字挑战',
+        description: '合并相同数字，挑战到达2048的目标！简单却令人上瘾',
+        category: '益智',
+        categoryColor: 'blue',
+        imageUrl: 'assets/games/2048/cover.svg',
+        gameUrl: 'game.html?game=2048',
+        gameFileUrl: 'assets/games/2048/index.html'
+    },
+    {
+        id: 'minesweeper',
+        name: '经典扫雷',
+        description: '逻辑推理游戏，小心地雷！考验你的逻辑思维和推理能力',
+        category: '益智',
+        categoryColor: 'blue',
+        imageUrl: 'assets/games/minesweeper/cover.svg',
+        gameUrl: 'game.html?game=minesweeper',
+        gameFileUrl: 'assets/games/minesweeper/index.html'
+    },
+    {
+        id: 'memory',
+        name: '翻牌记忆',
+        description: '翻开卡片找到相同的配对，锻炼你的记忆力',
+        category: '休闲',
+        categoryColor: 'green',
+        imageUrl: 'assets/games/memory/cover.svg',
+        gameUrl: 'game.html?game=memory',
+        gameFileUrl: 'assets/games/memory/index.html'
+    },
+    {
+        id: 'breakout',
+        name: '打砖块',
+        description: '用球拍控制小球打碎所有砖块，经典的街机游戏',
+        category: '动作',
+        categoryColor: 'red',
+        imageUrl: 'assets/games/breakout/cover.svg',
+        gameUrl: 'game.html?game=breakout',
+        gameFileUrl: 'assets/games/breakout/index.html'
+    },
+    {
+        id: 'jump',
+        name: '无尽跳跃',
+        description: '控制角色不断跳跃，躲避障碍，看看你能跳多远',
+        category: '动作',
+        categoryColor: 'red',
+        imageUrl: 'assets/games/jump/cover.svg',
+        gameUrl: 'game.html?game=jump',
+        gameFileUrl: 'assets/games/jump/index.html'
+    },
+    {
+        id: 'connect',
+        name: '连连看',
+        description: '连接相同的图案，在规定时间内清除所有方块',
+        category: '休闲',
+        categoryColor: 'green',
+        imageUrl: 'assets/games/connect/cover.svg',
+        gameUrl: 'game.html?game=connect',
+        gameFileUrl: 'assets/games/connect/index.html'
+    },
+    {
+        id: 'sudoku',
+        name: '数独挑战',
+        description: '填入1-9的数字，让每行、每列、每宫都不重复',
+        category: '益智',
+        categoryColor: 'blue',
+        imageUrl: 'assets/games/sudoku/cover.svg',
+        gameUrl: 'game.html?game=sudoku',
+        gameFileUrl: 'assets/games/sudoku/index.html'
+    },
+    {
+        id: 'racing',
+        name: '极速赛车',
+        description: '驾驶赛车避开障碍，在高速公路上飞驰',
+        category: '动作',
+        categoryColor: 'red',
+        imageUrl: 'assets/games/racing/cover.svg',
+        gameUrl: 'game.html?game=racing',
+        gameFileUrl: 'assets/games/racing/index.html'
     }
 ];
 

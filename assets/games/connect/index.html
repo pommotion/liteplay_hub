@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>连连看 - 轻游空间</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 20px;
+            max-width: 500px;
+            width: 95vw;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .score-info {
+            display: flex;
+            gap: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .time-left {
+            color: #e74c3c;
+            font-size: 18px;
+        }
+
+        .score {
+            color: #3498db;
+            font-size: 16px;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .game-board {
+            position: relative;
+            background: #f8f9fa;
+            border: 3px solid #e9ecef;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 15px 0;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            gap: 2px;
+            aspect-ratio: 5/4;
+        }
+
+        .tile {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tile:hover {
+            border-color: #3498db;
+            transform: scale(1.05);
+        }
+
+        .tile.selected {
+            border-color: #e74c3c;
+            background: #ffebee;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(231,76,60,0.3);
+        }
+
+        .tile.empty {
+            background: transparent;
+            border: none;
+            cursor: default;
+        }
+
+        .tile.empty:hover {
+            transform: none;
+        }
+
+        .connection-line {
+            position: absolute;
+            background: #e74c3c;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .game-status {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .game-over-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 300px;
+            width: 90%;
+        }
+
+        .game-over h2 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .final-score {
+            font-size: 18px;
+            margin: 15px 0;
+            color: #3498db;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-btn {
+            padding: 8px 15px;
+            border: 2px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .difficulty-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 15px;
+            }
+            
+            .game-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .tile {
+                font-size: 16px;
+            }
+            
+            .btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="score-info">
+                <div class="time-left">时间: <span id="timeLeft">300</span>s</div>
+                <div class="score">分数: <span id="score">0</span></div>
+            </div>
+            <div class="game-controls">
+                <button class="btn btn-warning" onclick="getHint()">提示</button>
+                <button class="btn btn-primary" onclick="shuffle()">重排</button>
+                <button class="btn btn-success" onclick="pauseGame()">暂停</button>
+            </div>
+        </div>
+
+        <div class="difficulty-selector">
+            <button class="difficulty-btn active" onclick="setDifficulty('easy')">简单</button>
+            <button class="difficulty-btn" onclick="setDifficulty('medium')">中等</button>
+            <button class="difficulty-btn" onclick="setDifficulty('hard')">困难</button>
+        </div>
+
+        <div class="game-board" id="gameBoard"></div>
+
+        <div class="game-status" id="gameStatus">点击相同图案进行连接</div>
+    </div>
+
+    <div class="game-over" id="gameOverScreen">
+        <div class="game-over-content">
+            <h2 id="gameOverTitle">游戏结束</h2>
+            <div class="final-score">
+                最终分数: <span id="finalScore">0</span>
+            </div>
+            <div style="margin: 20px 0;">
+                <button class="btn btn-success" onclick="restartGame()">重新开始</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏配置
+        const gameConfig = {
+            easy: { rows: 6, cols: 8, time: 300, types: 6 },
+            medium: { rows: 8, cols: 10, time: 240, types: 8 },
+            hard: { rows: 8, cols: 10, time: 180, types: 10 }
+        };
+
+        // 游戏状态
+        let gameState = {
+            board: [],
+            rows: 8,
+            cols: 10,
+            selectedTile: null,
+            score: 0,
+            timeLeft: 300,
+            gameActive: false,
+            paused: false,
+            difficulty: 'easy',
+            timer: null,
+            totalPairs: 0,
+            foundPairs: 0
+        };
+
+        // 图案符号
+        const symbols = ['🐱', '🐶', '🐰', '🐸', '🐼', '🦊', '🐯', '🐨', '🐷', '🐵', 
+                        '🍎', '🍊', '🍌', '🍇', '🍓', '🥝', '🍑', '🥭', '🍍', '🥥'];
+
+        // 初始化游戏板
+        function initializeBoard() {
+            const config = gameConfig[gameState.difficulty];
+            gameState.rows = config.rows;
+            gameState.cols = config.cols;
+            gameState.timeLeft = config.time;
+            
+            // 创建空白游戏板
+            gameState.board = Array(gameState.rows).fill().map(() => Array(gameState.cols).fill(null));
+            
+            // 计算可放置的格子数
+            const totalCells = gameState.rows * gameState.cols;
+            const pairCount = Math.floor(totalCells * 0.8 / 2); // 80%的格子有图案
+            gameState.totalPairs = pairCount;
+            gameState.foundPairs = 0;
+            
+            // 生成配对的符号
+            const symbolsToUse = symbols.slice(0, config.types);
+            const tiles = [];
+            
+            for (let i = 0; i < pairCount; i++) {
+                const symbol = symbolsToUse[i % symbolsToUse.length];
+                tiles.push(symbol, symbol);
+            }
+            
+            // 随机打乱
+            for (let i = tiles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+            }
+            
+            // 放置到游戏板上
+            let tileIndex = 0;
+            for (let row = 1; row < gameState.rows - 1; row++) {
+                for (let col = 1; col < gameState.cols - 1; col++) {
+                    if (tileIndex < tiles.length && Math.random() > 0.2) {
+                        gameState.board[row][col] = tiles[tileIndex++];
+                    }
+                }
+            }
+            
+            // 确保剩余的瓦片也被放置
+            while (tileIndex < tiles.length) {
+                const row = Math.floor(Math.random() * (gameState.rows - 2)) + 1;
+                const col = Math.floor(Math.random() * (gameState.cols - 2)) + 1;
+                if (!gameState.board[row][col]) {
+                    gameState.board[row][col] = tiles[tileIndex++];
+                }
+            }
+        }
+
+        // 渲染游戏板
+        function renderBoard() {
+            const board = document.getElementById('gameBoard');
+            board.style.gridTemplateColumns = `repeat(${gameState.cols}, 1fr)`;
+            board.style.gridTemplateRows = `repeat(${gameState.rows}, 1fr)`;
+            board.innerHTML = '';
+            
+            for (let row = 0; row < gameState.rows; row++) {
+                for (let col = 0; col < gameState.cols; col++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'tile';
+                    tile.dataset.row = row;
+                    tile.dataset.col = col;
+                    
+                    if (gameState.board[row][col]) {
+                        tile.textContent = gameState.board[row][col];
+                        tile.addEventListener('click', () => selectTile(row, col));
+                    } else {
+                        tile.classList.add('empty');
+                    }
+                    
+                    board.appendChild(tile);
+                }
+            }
+        }
+
+        // 选择瓦片
+        function selectTile(row, col) {
+            if (!gameState.gameActive || gameState.paused || !gameState.board[row][col]) return;
+            
+            const tile = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            
+            if (gameState.selectedTile) {
+                const [selectedRow, selectedCol] = gameState.selectedTile;
+                
+                if (selectedRow === row && selectedCol === col) {
+                    // 取消选择
+                    tile.classList.remove('selected');
+                    gameState.selectedTile = null;
+                    return;
+                }
+                
+                if (gameState.board[selectedRow][selectedCol] === gameState.board[row][col]) {
+                    // 检查是否可以连接
+                    const path = findPath(selectedRow, selectedCol, row, col);
+                    if (path) {
+                        // 连接成功
+                        connectTiles(selectedRow, selectedCol, row, col, path);
+                        return;
+                    }
+                }
+                
+                // 清除之前的选择
+                document.querySelector(`[data-row="${selectedRow}"][data-col="${selectedCol}"]`)
+                    .classList.remove('selected');
+            }
+            
+            // 选择新瓦片
+            tile.classList.add('selected');
+            gameState.selectedTile = [row, col];
+        }
+
+        // 寻找连接路径（最多两个转弯）
+        function findPath(row1, col1, row2, col2) {
+            // 直线连接
+            if (canConnect(row1, col1, row2, col2)) {
+                return [[row1, col1], [row2, col2]];
+            }
+            
+            // 一个转弯
+            // 横向到纵向
+            if (canConnect(row1, col1, row1, col2) && canConnect(row1, col2, row2, col2)) {
+                return [[row1, col1], [row1, col2], [row2, col2]];
+            }
+            // 纵向到横向
+            if (canConnect(row1, col1, row2, col1) && canConnect(row2, col1, row2, col2)) {
+                return [[row1, col1], [row2, col1], [row2, col2]];
+            }
+            
+            // 两个转弯 - 通过边界
+            for (let row = -1; row <= gameState.rows; row++) {
+                if ((row === -1 || row === gameState.rows || !hasObstacle(row, col1)) && 
+                    (row === -1 || row === gameState.rows || !hasObstacle(row, col2))) {
+                    if (canConnect(row1, col1, row, col1) && 
+                        canConnect(row, col1, row, col2) && 
+                        canConnect(row, col2, row2, col2)) {
+                        return [[row1, col1], [row, col1], [row, col2], [row2, col2]];
+                    }
+                }
+            }
+            
+            for (let col = -1; col <= gameState.cols; col++) {
+                if ((col === -1 || col === gameState.cols || !hasObstacle(row1, col)) && 
+                    (col === -1 || col === gameState.cols || !hasObstacle(row2, col))) {
+                    if (canConnect(row1, col1, row1, col) && 
+                        canConnect(row1, col, row2, col) && 
+                        canConnect(row2, col, row2, col2)) {
+                        return [[row1, col1], [row1, col], [row2, col], [row2, col2]];
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        // 检查两点间是否可以直线连接
+        function canConnect(row1, col1, row2, col2) {
+            if (row1 === row2) {
+                // 横向连接
+                const minCol = Math.min(col1, col2);
+                const maxCol = Math.max(col1, col2);
+                for (let col = minCol + 1; col < maxCol; col++) {
+                    if (hasObstacle(row1, col)) return false;
+                }
+                return true;
+            } else if (col1 === col2) {
+                // 纵向连接
+                const minRow = Math.min(row1, row2);
+                const maxRow = Math.max(row1, row2);
+                for (let row = minRow + 1; row < maxRow; row++) {
+                    if (hasObstacle(row, col1)) return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        // 检查位置是否有障碍
+        function hasObstacle(row, col) {
+            if (row < 0 || row >= gameState.rows || col < 0 || col >= gameState.cols) {
+                return false; // 边界外视为可通过
+            }
+            return gameState.board[row][col] !== null;
+        }
+
+        // 连接瓦片
+        function connectTiles(row1, col1, row2, col2, path) {
+            // 显示连接线
+            showConnectionLine(path);
+            
+            setTimeout(() => {
+                // 移除瓦片
+                gameState.board[row1][col1] = null;
+                gameState.board[row2][col2] = null;
+                gameState.foundPairs++;
+                
+                // 更新分数
+                gameState.score += 100;
+                document.getElementById('score').textContent = gameState.score;
+                
+                // 重新渲染
+                renderBoard();
+                
+                // 清除选择
+                gameState.selectedTile = null;
+                
+                // 检查游戏是否结束
+                if (gameState.foundPairs === gameState.totalPairs) {
+                    endGame(true);
+                }
+                
+                // 移除连接线
+                clearConnectionLines();
+                
+                // 检查是否还有可连接的对
+                if (!hasValidMoves()) {
+                    setTimeout(() => {
+                        if (confirm('没有可连接的对了！是否重新排列？')) {
+                            shuffle();
+                        } else {
+                            endGame(false);
+                        }
+                    }, 500);
+                }
+            }, 500);
+        }
+
+        // 显示连接线
+        function showConnectionLine(path) {
+            clearConnectionLines();
+            const board = document.getElementById('gameBoard');
+            const boardRect = board.getBoundingClientRect();
+            const tileSize = boardRect.width / gameState.cols;
+            
+            for (let i = 0; i < path.length - 1; i++) {
+                const [row1, col1] = path[i];
+                const [row2, col2] = path[i + 1];
+                
+                const line = document.createElement('div');
+                line.className = 'connection-line';
+                
+                const x1 = col1 * tileSize + tileSize / 2;
+                const y1 = row1 * tileSize + tileSize / 2;
+                const x2 = col2 * tileSize + tileSize / 2;
+                const y2 = row2 * tileSize + tileSize / 2;
+                
+                if (row1 === row2) {
+                    // 横线
+                    line.style.left = Math.min(x1, x2) + 'px';
+                    line.style.top = (y1 - 1) + 'px';
+                    line.style.width = Math.abs(x2 - x1) + 'px';
+                    line.style.height = '2px';
+                } else {
+                    // 竖线
+                    line.style.left = (x1 - 1) + 'px';
+                    line.style.top = Math.min(y1, y2) + 'px';
+                    line.style.width = '2px';
+                    line.style.height = Math.abs(y2 - y1) + 'px';
+                }
+                
+                board.appendChild(line);
+            }
+        }
+
+        // 清除连接线
+        function clearConnectionLines() {
+            const lines = document.querySelectorAll('.connection-line');
+            lines.forEach(line => line.remove());
+        }
+
+        // 检查是否还有有效移动
+        function hasValidMoves() {
+            for (let row1 = 0; row1 < gameState.rows; row1++) {
+                for (let col1 = 0; col1 < gameState.cols; col1++) {
+                    if (!gameState.board[row1][col1]) continue;
+                    
+                    for (let row2 = 0; row2 < gameState.rows; row2++) {
+                        for (let col2 = 0; col2 < gameState.cols; col2++) {
+                            if (row1 === row2 && col1 === col2) continue;
+                            if (!gameState.board[row2][col2]) continue;
+                            if (gameState.board[row1][col1] !== gameState.board[row2][col2]) continue;
+                            
+                            if (findPath(row1, col1, row2, col2)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        // 获取提示
+        function getHint() {
+            if (!gameState.gameActive || gameState.paused) return;
+            
+            for (let row1 = 0; row1 < gameState.rows; row1++) {
+                for (let col1 = 0; col1 < gameState.cols; col1++) {
+                    if (!gameState.board[row1][col1]) continue;
+                    
+                    for (let row2 = 0; row2 < gameState.rows; row2++) {
+                        for (let col2 = 0; col2 < gameState.cols; col2++) {
+                            if (row1 === row2 && col1 === col2) continue;
+                            if (!gameState.board[row2][col2]) continue;
+                            if (gameState.board[row1][col1] !== gameState.board[row2][col2]) continue;
+                            
+                            const path = findPath(row1, col1, row2, col2);
+                            if (path) {
+                                // 高亮提示的瓦片
+                                const tile1 = document.querySelector(`[data-row="${row1}"][data-col="${col1}"]`);
+                                const tile2 = document.querySelector(`[data-row="${row2}"][data-col="${col2}"]`);
+                                
+                                tile1.style.backgroundColor = '#fff3cd';
+                                tile2.style.backgroundColor = '#fff3cd';
+                                
+                                setTimeout(() => {
+                                    tile1.style.backgroundColor = '';
+                                    tile2.style.backgroundColor = '';
+                                }, 2000);
+                                
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            alert('没有找到可连接的对！');
+        }
+
+        // 重新排列
+        function shuffle() {
+            if (!gameState.gameActive) return;
+            
+            // 收集所有剩余的瓦片
+            const tiles = [];
+            for (let row = 0; row < gameState.rows; row++) {
+                for (let col = 0; col < gameState.cols; col++) {
+                    if (gameState.board[row][col]) {
+                        tiles.push(gameState.board[row][col]);
+                        gameState.board[row][col] = null;
+                    }
+                }
+            }
+            
+            // 随机打乱
+            for (let i = tiles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+            }
+            
+            // 重新放置
+            let tileIndex = 0;
+            for (let row = 1; row < gameState.rows - 1 && tileIndex < tiles.length; row++) {
+                for (let col = 1; col < gameState.cols - 1 && tileIndex < tiles.length; col++) {
+                    if (Math.random() > 0.1) {
+                        gameState.board[row][col] = tiles[tileIndex++];
+                    }
+                }
+            }
+            
+            // 确保所有瓦片都被放置
+            while (tileIndex < tiles.length) {
+                const row = Math.floor(Math.random() * (gameState.rows - 2)) + 1;
+                const col = Math.floor(Math.random() * (gameState.cols - 2)) + 1;
+                if (!gameState.board[row][col]) {
+                    gameState.board[row][col] = tiles[tileIndex++];
+                }
+            }
+            
+            renderBoard();
+            gameState.selectedTile = null;
+        }
+
+        // 设置难度
+        function setDifficulty(difficulty) {
+            gameState.difficulty = difficulty;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // 重新开始游戏
+            if (gameState.gameActive) {
+                restartGame();
+            }
+        }
+
+        // 暂停游戏
+        function pauseGame() {
+            if (!gameState.gameActive) return;
+            
+            gameState.paused = !gameState.paused;
+            const btn = event.target;
+            btn.textContent = gameState.paused ? '继续' : '暂停';
+            
+            if (gameState.paused) {
+                clearInterval(gameState.timer);
+                document.getElementById('gameStatus').textContent = '游戏已暂停';
+            } else {
+                startTimer();
+                document.getElementById('gameStatus').textContent = '点击相同图案进行连接';
+            }
+        }
+
+        // 开始计时器
+        function startTimer() {
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                document.getElementById('timeLeft').textContent = gameState.timeLeft;
+                
+                if (gameState.timeLeft <= 0) {
+                    endGame(false);
+                }
+            }, 1000);
+        }
+
+        // 结束游戏
+        function endGame(victory) {
+            gameState.gameActive = false;
+            clearInterval(gameState.timer);
+            
+            const screen = document.getElementById('gameOverScreen');
+            const title = document.getElementById('gameOverTitle');
+            const finalScore = document.getElementById('finalScore');
+            
+            title.textContent = victory ? '恭喜通关！' : '游戏结束';
+            finalScore.textContent = gameState.score;
+            
+            screen.style.display = 'flex';
+            
+            // 保存最高分
+            const storageKey = `connect_best_score_${gameState.difficulty}`;
+            const bestScore = localStorage.getItem(storageKey) || 0;
+            if (gameState.score > bestScore) {
+                localStorage.setItem(storageKey, gameState.score.toString());
+            }
+            
+            // 向父窗口发送游戏统计
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'game_over',
+                    gameId: 'connect',
+                    score: gameState.score,
+                    victory: victory,
+                    difficulty: gameState.difficulty
+                }, '*');
+            }
+        }
+
+        // 重新开始游戏
+        function restartGame() {
+            clearInterval(gameState.timer);
+            document.getElementById('gameOverScreen').style.display = 'none';
+            
+            gameState.score = 0;
+            gameState.selectedTile = null;
+            gameState.gameActive = true;
+            gameState.paused = false;
+            gameState.foundPairs = 0;
+            
+            // 重置UI
+            document.getElementById('score').textContent = '0';
+            document.getElementById('gameStatus').textContent = '点击相同图案进行连接';
+            document.querySelector('.btn-success').textContent = '暂停';
+            
+            initializeBoard();
+            renderBoard();
+            startTimer();
+        }
+
+        // 监听来自父窗口的消息
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'load_save') {
+                // 加载存档数据
+                if (event.data.data && event.data.data.difficulty) {
+                    setDifficulty(event.data.data.difficulty);
+                }
+            } else if (event.data.type === 'sound_toggle') {
+                // 处理声音开关
+                // 这个游戏没有声音，所以不需要处理
+            }
+        });
+
+        // 页面加载完成后自动开始游戏
+        window.addEventListener('load', () => {
+            setTimeout(restartGame, 100);
+        });
+
+        // 防止触摸事件的默认行为
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+    </script>
+</body>
+</html> 
