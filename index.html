@@ -330,6 +330,24 @@
                         const gameCards = allGames.map(game => generateGameCard(game)).join('');
                         featured.innerHTML = gameCards;
                         console.log('✅ 推荐游戏生成成功!', featured.children.length, '个卡片');
+                        
+                        // 重新设置事件委托，确保新生成的卡片有事件监听
+                        if (typeof setupGlobalEventDelegation === 'function') {
+                            console.log('重新设置事件委托...');
+                            setupGlobalEventDelegation();
+                        }
+                        
+                        // 手动检查生成的按钮
+                        const playButtons = featured.querySelectorAll('[data-action="play"]');
+                        console.log('找到播放按钮数量:', playButtons.length);
+                        playButtons.forEach((btn, index) => {
+                            console.log(`按钮${index + 1}:`, {
+                                gameId: btn.dataset.gameId,
+                                action: btn.dataset.action,
+                                text: btn.textContent?.trim()
+                            });
+                        });
+                        
                     } catch (error) {
                         console.error('❌ 推荐游戏生成失败:', error);
                     }
@@ -358,6 +376,12 @@
                 
                 if (forceGenerateGames()) {
                     console.log('🎉 游戏卡片生成成功!');
+                    
+                    // 额外的验证 - 测试点击事件
+                    setTimeout(() => {
+                        testClickEvents();
+                    }, 500);
+                    
                     return;
                 }
                 
@@ -370,17 +394,32 @@
                 }
             }
             
-            // 初始化主题
-            if (typeof initThemeToggle === 'function') {
-                initThemeToggle();
-                console.log('✅ 主题切换初始化完成');
+            // 测试点击事件是否正常工作
+            function testClickEvents() {
+                console.log('开始测试点击事件...');
+                
+                const allActionButtons = document.querySelectorAll('[data-action]');
+                console.log(`找到 ${allActionButtons.length} 个带有data-action的按钮`);
+                
+                // 为每个按钮添加测试监听器
+                allActionButtons.forEach((btn, index) => {
+                    btn.addEventListener('click', function(e) {
+                        console.log(`测试监听器触发 - 按钮${index + 1}:`, {
+                            action: this.dataset.action,
+                            gameId: this.dataset.gameId,
+                            target: e.target.tagName
+                        });
+                    });
+                });
+                
+                console.log('✅ 测试监听器添加完成');
             }
             
-            // 初始化备用功能
-            if (typeof initHomePage === 'function') {
-                initHomePage();
-                console.log('✅ 主页功能初始化完成');
-            }
+            // 初始化主题 - 不重复调用，因为main.js已经处理了
+            console.log('跳过主题初始化（main.js已处理）');
+            
+            // 初始化备用功能 - 不重复调用，因为main.js已经处理了
+            console.log('跳过主页功能初始化（main.js已处理）');
             
             // 开始生成尝试
             tryGenerate();

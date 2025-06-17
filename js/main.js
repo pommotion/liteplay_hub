@@ -856,48 +856,88 @@ function searchGames(query) {
 
 // ==================== 全局事件委托和初始化 ====================
 
-// 页面加载完成后初始化所有功能
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM加载完成，开始初始化...');
-    
-    // 1. 全局事件委托 - 处理所有游戏卡片中的按钮点击
+// 全局事件委托设置 - 确保在任何时候都有效
+function setupGlobalEventDelegation() {
     console.log('设置全局事件委托...');
-    document.addEventListener('click', function(event) {
+    
+    // 移除之前的监听器（如果存在）
+    if (window.globalClickHandler) {
+        document.removeEventListener('click', window.globalClickHandler);
+    }
+    
+    // 创建新的点击处理器
+    window.globalClickHandler = function(event) {
+        console.log('全局点击事件触发:', event.target);
+        
         const target = event.target;
         const button = target.closest('[data-action]');
         
-        if (!button) return;
+        if (!button) {
+            console.log('未找到data-action元素，忽略点击');
+            return;
+        }
         
         const action = button.dataset.action;
         const gameId = button.dataset.gameId;
         
-        console.log('按钮被点击:', { action, gameId, button });
+        console.log('检测到按钮点击:', { 
+            action, 
+            gameId, 
+            buttonElement: button,
+            targetElement: target,
+            buttonText: button.textContent?.trim()
+        });
         
         if (!gameId) {
-            console.error('游戏ID缺失');
+            console.error('游戏ID缺失，按钮:', button);
             return;
         }
         
+        // 防止默认行为和事件冒泡
+        event.preventDefault();
+        event.stopPropagation();
+        
         switch (action) {
             case 'play':
-                event.preventDefault();
-                event.stopPropagation();
-                console.log('执行开始游戏，游戏ID:', gameId);
-                startGame(gameId);
+                console.log('=== 执行开始游戏 ===');
+                console.log('游戏ID:', gameId);
+                try {
+                    startGame(gameId);
+                } catch (error) {
+                    console.error('startGame执行失败:', error);
+                    alert('启动游戏失败: ' + error.message);
+                }
                 break;
                 
             case 'favorite':
-                event.preventDefault();
-                event.stopPropagation();
-                console.log('执行收藏切换，游戏ID:', gameId);
-                toggleGameFavorite(gameId, event);
+                console.log('=== 执行收藏切换 ===');
+                console.log('游戏ID:', gameId);
+                try {
+                    toggleGameFavorite(gameId, event);
+                } catch (error) {
+                    console.error('toggleGameFavorite执行失败:', error);
+                }
                 break;
                 
             default:
                 console.log('未知的操作:', action);
         }
-    });
-    console.log('全局事件委托设置完成');
+    };
+    
+    // 添加事件监听器
+    document.addEventListener('click', window.globalClickHandler, true); // 使用捕获模式
+    console.log('✅ 全局事件委托设置完成');
+}
+
+// 立即设置事件委托，不等待DOM加载
+setupGlobalEventDelegation();
+
+// 页面加载完成后初始化所有功能
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM加载完成，开始初始化...');
+    
+    // 确保事件委托正常工作
+    setupGlobalEventDelegation();
     
     // 2. 基础功能初始化
     console.log('初始化基础功能...');
