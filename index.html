@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轻游空间 (LitePlay Hub) - 即点即玩的Web小游戏平台</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Global Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* 支持文本截断 */
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* 游戏卡片增强样式 */
+        .game-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .game-card:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .dark .game-card:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* 收藏按钮动画 */
+        .favorite-btn.text-red-500 {
+            animation: heartBeat 0.6s ease-in-out;
+        }
+        
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.3); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.3); }
+            70% { transform: scale(1); }
+        }
+        
+        /* 渐变按钮增强 */
+        .play-btn {
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-gamepad text-2xl text-primary"></i>
+                    <span class="text-xl font-bold text-gray-900 dark:text-white">轻游空间</span>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">LitePlay Hub</span>
+                </div>
+                
+                <!-- 右侧导航 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 搜索框 -->
+                    <div class="hidden md:flex items-center space-x-2">
+                        <div class="relative">
+                            <input type="text" id="search-input" placeholder="搜索游戏..." 
+                                   class="w-64 pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <button id="search-button" class="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 导航链接 -->
+                    <div class="flex items-center space-x-4">
+                        <a href="categories.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-th-large"></i>
+                            <span class="hidden sm:inline">分类</span>
+                        </a>
+                        <a href="recent.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-history"></i>
+                            <span class="hidden sm:inline">最近</span>
+                        </a>
+                        <a href="favorites.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-heart"></i>
+                            <span class="hidden sm:inline">收藏</span>
+                        </a>
+                        
+                        <!-- 主题切换按钮 -->
+                        <button id="theme-toggle" class="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- 推荐游戏部分 -->
+        <section class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">🎮 推荐游戏</h2>
+                <a href="categories.html" class="text-primary hover:text-primary/80 transition-colors font-medium">
+                    查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div id="featured-games" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 推荐游戏卡片将在此处动态生成 -->
+            </div>
+        </section>
+
+        <!-- 游戏分类部分 -->
+        <section class="mb-12">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">📂 游戏分类</h2>
+                <a href="categories.html" class="text-primary hover:text-primary/80 transition-colors font-medium">
+                    查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                <a href="categories.html?category=益智" class="group">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 group-hover:border-blue-300 dark:group-hover:border-blue-600">
+                        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/50 transition-colors">
+                            <i class="fas fa-puzzle-piece text-blue-600 dark:text-blue-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">益智</h3>
+                    </div>
+                </a>
+                <a href="categories.html?category=休闲" class="group">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 group-hover:border-green-300 dark:group-hover:border-green-600">
+                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-green-200 dark:group-hover:bg-green-800/50 transition-colors">
+                            <i class="fas fa-coffee text-green-600 dark:text-green-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">休闲</h3>
+                    </div>
+                </a>
+                <a href="categories.html?category=动作" class="group">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 group-hover:border-red-300 dark:group-hover:border-red-600">
+                        <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-red-200 dark:group-hover:bg-red-800/50 transition-colors">
+                            <i class="fas fa-running text-red-600 dark:text-red-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">动作</h3>
+                    </div>
+                </a>
+                <a href="categories.html?category=射击" class="group">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 group-hover:border-purple-300 dark:group-hover:border-purple-600">
+                        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-purple-200 dark:group-hover:bg-purple-800/50 transition-colors">
+                            <i class="fas fa-crosshairs text-purple-600 dark:text-purple-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">射击</h3>
+                    </div>
+                </a>
+                <a href="categories.html?category=策略" class="group">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 group-hover:border-yellow-300 dark:group-hover:border-yellow-600">
+                        <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-yellow-200 dark:group-hover:bg-yellow-800/50 transition-colors">
+                            <i class="fas fa-chess text-yellow-600 dark:text-yellow-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">策略</h3>
+                    </div>
+                </a>
+                <a href="categories.html?category=竞速" class="group">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 text-center hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 group-hover:border-indigo-300 dark:group-hover:border-indigo-600">
+                        <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800/50 transition-colors">
+                            <i class="fas fa-car text-indigo-600 dark:text-indigo-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-900 dark:text-white">竞速</h3>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 最近玩过部分 -->
+        <section id="recent-section" class="mb-12" style="display: none;">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">⏱️ 最近玩过</h2>
+                <a href="recent.html" class="text-primary hover:text-primary/80 transition-colors font-medium">
+                    查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div id="recent-games" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- 最近玩过的游戏卡片将在此处动态生成 -->
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-16">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 平台信息 -->
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-gamepad text-xl text-primary"></i>
+                        <span class="text-lg font-bold text-gray-900 dark:text-white">轻游空间</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        即点即玩的Web小游戏平台，无需下载，随时随地享受游戏乐趣。
+                    </p>
+                </div>
+                
+                <!-- 快速链接 -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="categories.html" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">游戏分类</a></li>
+                        <li><a href="recent.html" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">最近玩过</a></li>
+                        <li><a href="favorites.html" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">我的收藏</a></li>
+                        <li><a href="settings.html" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">设置</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 帮助与支持 -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">帮助与支持</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">关于我们</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">反馈建议</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">隐私政策</a></li>
+                        <li><a href="#" class="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">使用条款</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 版权信息 -->
+            <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-6 text-center">
+                <p class="text-gray-500 dark:text-gray-400 text-sm">
+                    © 2024 轻游空间 LitePlay Hub. 保留所有权利.
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Main JavaScript -->
+    <script src="js/main.js"></script>
+    
+    <!-- 首页专属JavaScript -->
+    <script>
+        // 首页专属初始化 - 多重保障机制
+        function initIndexPage() {
+            console.log('=== 首页初始化开始 ===');
+            
+            // 检查关键元素
+            function checkElements() {
+                const featured = document.getElementById('featured-games');
+                const recent = document.getElementById('recent-games');
+                console.log('容器检查:', {
+                    featured: !!featured,
+                    recent: !!recent,
+                    allGames: typeof allGames !== 'undefined' ? allGames.length : 'undefined'
+                });
+                return { featured, recent };
+            }
+            
+            // 强制生成游戏卡片
+            function forceGenerateGames() {
+                console.log('开始强制生成游戏卡片...');
+                
+                const { featured, recent } = checkElements();
+                
+                // 检查游戏数据
+                if (typeof allGames === 'undefined' || !allGames.length) {
+                    console.error('游戏数据未加载!');
+                    return false;
+                }
+                
+                // 检查生成函数
+                if (typeof generateGameCard !== 'function') {
+                    console.error('generateGameCard函数不存在!');
+                    return false;
+                }
+                
+                // 生成推荐游戏
+                if (featured) {
+                    try {
+                        console.log('开始生成推荐游戏...');
+                        const gameCards = allGames.map(game => generateGameCard(game)).join('');
+                        featured.innerHTML = gameCards;
+                        console.log('✅ 推荐游戏生成成功!', featured.children.length, '个卡片');
+                    } catch (error) {
+                        console.error('❌ 推荐游戏生成失败:', error);
+                    }
+                } else {
+                    console.error('❌ featured-games容器不存在!');
+                }
+                
+                // 生成最近游戏
+                if (recent) {
+                    try {
+                        if (typeof updateRecentGamesDisplay === 'function') {
+                            updateRecentGamesDisplay();
+                            console.log('✅ 最近游戏更新成功!');
+                        }
+                    } catch (error) {
+                        console.error('❌ 最近游戏更新失败:', error);
+                    }
+                }
+                
+                return true;
+            }
+            
+            // 多重尝试机制
+            function tryGenerate(attempt = 1) {
+                console.log(`第${attempt}次尝试生成游戏卡片...`);
+                
+                if (forceGenerateGames()) {
+                    console.log('🎉 游戏卡片生成成功!');
+                    return;
+                }
+                
+                if (attempt < 5) {
+                    const delay = attempt * 200; // 200ms, 400ms, 600ms, 800ms
+                    console.log(`等待${delay}ms后重试...`);
+                    setTimeout(() => tryGenerate(attempt + 1), delay);
+                } else {
+                    console.error('💥 所有尝试都失败了!');
+                }
+            }
+            
+            // 初始化主题
+            if (typeof initThemeToggle === 'function') {
+                initThemeToggle();
+                console.log('✅ 主题切换初始化完成');
+            }
+            
+            // 初始化备用功能
+            if (typeof initHomePage === 'function') {
+                initHomePage();
+                console.log('✅ 主页功能初始化完成');
+            }
+            
+            // 开始生成尝试
+            tryGenerate();
+            
+            console.log('=== 首页初始化完成 ===');
+        }
+        
+        // 确保在正确的时机初始化
+        function ensureInit() {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(initIndexPage, 100);
+                });
+            } else {
+                setTimeout(initIndexPage, 100);
+            }
+        }
+        
+        // 立即执行
+        ensureInit();
+    </script>
+</body>
+</html> 

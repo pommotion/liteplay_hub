@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最近玩过 - 轻游空间 (LitePlay Hub)</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Global Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .game-card {
+            transition: all 0.3s ease;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .dark .game-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .recent-game-card {
+            position: relative;
+            overflow: visible;
+        }
+        
+        .recent-game-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(135deg, #3B82F6, #10B981);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .recent-game-card:hover::before {
+            opacity: 1;
+        }
+        
+        .play-count-badge {
+            background: linear-gradient(135deg, #F59E0B, #EF4444);
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .clear-btn-danger:hover {
+            background: linear-gradient(135deg, #DC2626, #B91C1C);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-gamepad text-2xl text-primary"></i>
+                    <a href="index.html" class="text-xl font-bold text-gray-900 dark:text-white hover:text-primary transition-colors">轻游空间</a>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">LitePlay Hub</span>
+                </div>
+                
+                <!-- 右侧导航 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 搜索框 -->
+                    <div class="hidden md:flex items-center space-x-2">
+                        <div class="relative">
+                            <input type="text" id="search-input" placeholder="搜索游戏..." 
+                                   class="w-64 pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <button id="search-button" class="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 导航链接 -->
+                    <div class="flex items-center space-x-4">
+                        <a href="categories.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-th-large"></i>
+                            <span class="hidden sm:inline">分类</span>
+                        </a>
+                        <a href="recent.html" class="flex items-center space-x-1 text-primary font-medium">
+                            <i class="fas fa-history"></i>
+                            <span class="hidden sm:inline">最近</span>
+                        </a>
+                        <a href="favorites.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-heart"></i>
+                            <span class="hidden sm:inline">收藏</span>
+                        </a>
+                        
+                        <!-- 主题切换按钮 -->
+                        <button id="theme-toggle" class="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- 页面标题 -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <i class="fas fa-history text-primary mr-3"></i>最近玩过
+            </h1>
+            <nav class="text-sm text-gray-600 dark:text-gray-400">
+                <a href="index.html" class="hover:text-primary transition-colors">首页</a>
+                <span class="mx-2">/</span>
+                <span>最近玩过</span>
+            </nav>
+        </div>
+
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden mb-6">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索游戏..." 
+                       class="w-full pl-10 pr-12 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <button id="mobile-search-button" class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 统计信息与操作栏 -->
+        <div class="mb-8" id="stats-section">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                            游戏历史记录
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            共 <span id="total-games" class="font-medium text-primary">0</span> 款游戏 • 
+                            总游玩次数 <span id="total-plays" class="font-medium text-secondary">0</span> 次
+                        </p>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <!-- 排序选项 -->
+                        <select id="sort-order" class="px-3 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                            <option value="recent">最近游玩</option>
+                            <option value="frequency">游玩次数</option>
+                            <option value="name">游戏名称</option>
+                        </select>
+                        
+                        <!-- 清空记录按钮 -->
+                        <button id="clear-history" class="clear-btn-danger px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all duration-200 text-sm">
+                            <i class="fas fa-trash-alt mr-2"></i>清空记录
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 游戏列表展示区 -->
+        <div id="games-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 fade-in">
+            <!-- 游戏卡片将在此动态生成 -->
+        </div>
+
+        <!-- 无游戏记录提示 -->
+        <div id="no-games" class="text-center py-16" style="display: none;">
+            <div class="max-w-md mx-auto">
+                <i class="fas fa-clock text-6xl text-gray-300 dark:text-gray-600 mb-6"></i>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">您最近没有玩过任何游戏</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    开始游玩一些有趣的游戏，它们会自动记录在这里，方便您下次快速找到。
+                </p>
+                <div class="space-y-2 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
+                    <a href="index.html" class="inline-block bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                        <i class="fas fa-gamepad mr-2"></i>发现游戏
+                    </a>
+                    <a href="categories.html" class="inline-block bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <i class="fas fa-th-large mr-2"></i>浏览分类
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    
+    <!-- Main JavaScript -->
+    <script src="js/main.js"></script>
+    
+    <!-- 最近玩过页面专属JavaScript -->
+    <script>
+        let recentGames = [];
+        let gameStats = {};
+        
+        // 格式化时间显示
+        function formatTimeAgo(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 1) {
+                return '刚刚';
+            } else if (minutes < 60) {
+                return `${minutes}分钟前`;
+            } else if (hours < 24) {
+                return `${hours}小时前`;
+            } else if (days === 1) {
+                return '昨天';
+            } else if (days < 7) {
+                return `${days}天前`;
+            } else {
+                return new Date(timestamp).toLocaleDateString('zh-CN');
+            }
+        }
+        
+        // 获取游戏统计数据
+        function getGameStats(gameId) {
+            const statsKey = `gameStats_${gameId}`;
+            return JSON.parse(localStorage.getItem(statsKey)) || { playCount: 0 };
+        }
+        
+        // 删除重复的createRecentGameCard函数，统一使用main.js中的generateGameCard函数
+        
+        // 收藏切换函数
+        function toggleFavorite(gameId, buttonElement) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const icon = buttonElement.querySelector('i');
+            
+            if (favorites.includes(gameId)) {
+                // 移除收藏
+                favorites = favorites.filter(id => id !== gameId);
+                icon.classList.remove('text-red-500');
+                icon.classList.add('text-gray-400');
+            } else {
+                // 添加收藏
+                favorites.push(gameId);
+                icon.classList.remove('text-gray-400');
+                icon.classList.add('text-red-500');
+            }
+            
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+        
+        // 删除重复的startGame函数，使用main.js中的全局函数
+        
+        // 加载最近玩过的游戏
+        function loadRecentGames() {
+            const recentData = JSON.parse(localStorage.getItem('recentlyPlayed')) || [];
+            
+            // 为每个游戏加载统计信息
+            recentGames = recentData.map(game => {
+                const stats = getGameStats(game.id);
+                return {
+                    ...game,
+                    playCount: stats.playCount
+                };
+            });
+            
+            return recentGames;
+        }
+        
+        // 应用排序
+        function applySorting(games) {
+            const sortOrder = document.getElementById('sort-order').value;
+            const sortedGames = [...games];
+            
+            switch (sortOrder) {
+                case 'frequency':
+                    sortedGames.sort((a, b) => b.playCount - a.playCount);
+                    break;
+                case 'name':
+                    sortedGames.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+                    break;
+                case 'recent':
+                default:
+                    sortedGames.sort((a, b) => b.timestamp - a.timestamp);
+                    break;
+            }
+            
+            return sortedGames;
+        }
+        
+        // 渲染游戏列表
+        function renderRecentGames() {
+            const gamesContainer = document.getElementById('games-container');
+            const noGamesDiv = document.getElementById('no-games');
+            const statsSection = document.getElementById('stats-section');
+            
+            const games = loadRecentGames();
+            const sortedGames = applySorting(games);
+            
+            if (sortedGames.length === 0) {
+                // 显示无游戏提示
+                gamesContainer.style.display = 'none';
+                noGamesDiv.style.display = 'block';
+                statsSection.style.display = 'none';
+            } else {
+                // 更新统计信息
+                updateStats(sortedGames);
+                
+                // 渲染游戏卡片 - 使用main.js中的统一函数
+                gamesContainer.innerHTML = sortedGames.map(game => generateGameCard(game, { showStats: true })).join('');
+                gamesContainer.style.display = 'grid';
+                noGamesDiv.style.display = 'none';
+                statsSection.style.display = 'block';
+                
+                // 添加淡入动画
+                gamesContainer.classList.remove('fade-in');
+                setTimeout(() => gamesContainer.classList.add('fade-in'), 10);
+            }
+        }
+        
+        // 更新统计信息
+        function updateStats(games) {
+            const totalGames = games.length;
+            const totalPlays = games.reduce((sum, game) => sum + game.playCount, 0);
+            
+            document.getElementById('total-games').textContent = totalGames;
+            document.getElementById('total-plays').textContent = totalPlays;
+        }
+        
+        // 清空游戏记录
+        function clearGameHistory() {
+            // 显示确认对话框
+            const isConfirmed = confirm(
+                '确定要清空所有游戏记录吗？\n\n这将删除：\n• 最近玩过的游戏列表\n• 所有游戏的游玩次数统计\n\n此操作无法撤销。'
+            );
+            
+            if (isConfirmed) {
+                // 清空最近玩过的记录
+                localStorage.removeItem('recentlyPlayed');
+                
+                // 清空所有游戏统计数据
+                const keys = Object.keys(localStorage);
+                keys.forEach(key => {
+                    if (key.startsWith('gameStats_')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+                
+                // 重新渲染页面
+                renderRecentGames();
+                
+                // 显示成功提示
+                showNotification('游戏记录已清空', 'success');
+            }
+        }
+        
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+            
+            if (type === 'success') {
+                notification.className += ' bg-green-500 text-white';
+                notification.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${message}`;
+            } else {
+                notification.className += ' bg-blue-500 text-white';
+                notification.innerHTML = `<i class="fas fa-info-circle mr-2"></i>${message}`;
+            }
+            
+            document.body.appendChild(notification);
+            
+            // 显示动画
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // 3秒后自动消失
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // 初始化最近玩过页面
+        function initializeRecentPage() {
+            // 渲染游戏列表
+            renderRecentGames();
+            
+            // 添加排序事件监听器
+            document.getElementById('sort-order').addEventListener('change', renderRecentGames);
+            
+            // 添加清空记录按钮事件
+            document.getElementById('clear-history').addEventListener('click', clearGameHistory);
+            
+            // 添加移动端搜索功能
+            const mobileSearchInput = document.getElementById('mobile-search-input');
+            const mobileSearchButton = document.getElementById('mobile-search-button');
+            
+            if (mobileSearchInput) {
+                mobileSearchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performMobileSearch();
+                    }
+                });
+            }
+            
+            if (mobileSearchButton) {
+                mobileSearchButton.addEventListener('click', performMobileSearch);
+            }
+        }
+        
+        // 移动端搜索
+        function performMobileSearch() {
+            const mobileSearchInput = document.getElementById('mobile-search-input');
+            if (mobileSearchInput) {
+                const query = mobileSearchInput.value.trim();
+                if (query) {
+                    const encodedQuery = encodeURIComponent(query);
+                    window.location.href = `search.html?query=${encodedQuery}`;
+                }
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化主题切换
+            if (typeof initThemeToggle === 'function') {
+                initThemeToggle();
+            }
+            
+            // 使用main.js中的最近玩过页面初始化函数
+            if (typeof initRecentPage === 'function') {
+                initRecentPage();
+            } else {
+                // 如果main.js还没加载，使用本地函数
+                initializeRecentPage();
+            }
+        });
+        
+        // 监听存储变化，实时更新页面
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'recentlyPlayed' || e.key?.startsWith('gameStats_')) {
+                renderRecentGames();
+            }
+        });
+    </script>
+</body>
+</html> 

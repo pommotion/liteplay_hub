@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置 - 轻游空间 (LitePlay Hub)</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Global Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .settings-card {
+            transition: all 0.3s ease;
+        }
+        
+        .settings-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .dark .settings-card:hover {
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .theme-toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .theme-toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+            transition: .4s;
+            border-radius: 30px;
+        }
+        
+        .theme-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        input:checked + .theme-slider {
+            background: linear-gradient(135deg, #1F2937, #374151);
+        }
+        
+        input:checked + .theme-slider:before {
+            transform: translateX(30px);
+        }
+        
+        .danger-btn {
+            background: linear-gradient(135deg, #DC2626, #B91C1C);
+            transition: all 0.3s ease;
+        }
+        
+        .danger-btn:hover {
+            background: linear-gradient(135deg, #B91C1C, #991B1B);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+        
+        .success-message {
+            animation: successFade 3s ease-in-out forwards;
+        }
+        
+        @keyframes successFade {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            10%, 80% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .storage-info {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+            border-left: 4px solid #3B82F6;
+        }
+        
+        .about-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .version-badge {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .github-link {
+            transition: all 0.3s ease;
+        }
+        
+        .github-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-gamepad text-2xl text-primary"></i>
+                    <a href="index.html" class="text-xl font-bold text-gray-900 dark:text-white hover:text-primary transition-colors">轻游空间</a>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">LitePlay Hub</span>
+                </div>
+                
+                <!-- 右侧导航 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 搜索框 -->
+                    <div class="hidden md:flex items-center space-x-2">
+                        <div class="relative">
+                            <input type="text" id="search-input" placeholder="搜索游戏..." 
+                                   class="w-64 pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <button id="search-button" class="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 导航链接 -->
+                    <div class="flex items-center space-x-4">
+                        <a href="categories.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-th-large"></i>
+                            <span class="hidden sm:inline">分类</span>
+                        </a>
+                        <a href="recent.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-history"></i>
+                            <span class="hidden sm:inline">最近</span>
+                        </a>
+                        <a href="favorites.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-heart"></i>
+                            <span class="hidden sm:inline">收藏</span>
+                        </a>
+                        
+                        <!-- 主题切换按钮 -->
+                        <button id="theme-toggle" class="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        
+                        <!-- 设置按钮（当前页面） -->
+                        <a href="settings.html" class="flex items-center space-x-1 text-primary font-medium">
+                            <i class="fas fa-cog"></i>
+                            <span class="hidden sm:inline">设置</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- 页面标题 -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <i class="fas fa-cog text-primary mr-3"></i>设置
+            </h1>
+            <nav class="text-sm text-gray-600 dark:text-gray-400">
+                <a href="index.html" class="hover:text-primary transition-colors">首页</a>
+                <span class="mx-2">/</span>
+                <span>设置</span>
+            </nav>
+        </div>
+
+        <div class="space-y-8 fade-in">
+            
+            <!-- 外观设置区域 -->
+            <div class="settings-card bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-palette text-primary text-xl mr-3"></i>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">外观</h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- 主题切换 -->
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="flex-1">
+                            <h3 class="font-medium text-gray-900 dark:text-white mb-1">界面主题</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                当前主题：<span id="current-theme-text" class="font-medium text-primary">浅色</span>
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-sm text-gray-600 dark:text-gray-300">
+                                <i class="fas fa-sun mr-1"></i>浅色
+                            </span>
+                            <label class="theme-toggle-switch">
+                                <input type="checkbox" id="theme-switch">
+                                <span class="theme-slider"></span>
+                            </label>
+                            <span class="text-sm text-gray-600 dark:text-gray-300">
+                                <i class="fas fa-moon mr-1"></i>深色
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- 主题预览 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-white border-2 border-gray-200 rounded-lg transition-all" id="light-preview">
+                            <div class="flex items-center mb-2">
+                                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="h-2 bg-gray-300 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-200 rounded w-1/2"></div>
+                                <div class="h-8 bg-blue-100 rounded flex items-center justify-center">
+                                    <span class="text-xs text-blue-800">浅色主题</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-gray-800 border-2 border-gray-600 rounded-lg transition-all" id="dark-preview">
+                            <div class="flex items-center mb-2">
+                                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="h-2 bg-gray-600 rounded w-3/4"></div>
+                                <div class="h-2 bg-gray-700 rounded w-1/2"></div>
+                                <div class="h-8 bg-gray-700 rounded flex items-center justify-center">
+                                    <span class="text-xs text-gray-300">深色主题</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据管理区域 -->
+            <div class="settings-card bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-database text-primary text-xl mr-3"></i>
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">数据管理</h2>
+                </div>
+                
+                <!-- 隐私说明 -->
+                <div class="storage-info p-4 rounded-lg mb-6">
+                    <div class="flex items-start">
+                        <i class="fas fa-shield-alt text-primary text-lg mr-3 mt-1"></i>
+                        <div>
+                            <h3 class="font-medium text-gray-900 dark:text-white mb-2">隐私保护声明</h3>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                                您的游戏相关数据（包括最近玩过的记录、收藏夹列表、游戏存档等）全部存储在您自己的浏览器本地存储中。
+                                轻游空间承诺不会收集、传输或上传这些数据到任何服务器。您的隐私和数据安全完全由您自己掌控。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数据统计 -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-blue-700 dark:text-blue-300">最近玩过</span>
+                            <i class="fas fa-history text-blue-500"></i>
+                        </div>
+                        <div class="text-xl font-bold text-blue-900 dark:text-blue-100" id="recent-count">0</div>
+                    </div>
+                    <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-red-700 dark:text-red-300">收藏游戏</span>
+                            <i class="fas fa-heart text-red-500"></i>
+                        </div>
+                        <div class="text-xl font-bold text-red-900 dark:text-red-100" id="favorites-count">0</div>
+                    </div>
+                    <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-green-700 dark:text-green-300">游戏存档</span>
+                            <i class="fas fa-save text-green-500"></i>
+                        </div>
+                        <div class="text-xl font-bold text-green-900 dark:text-green-100" id="saves-count">0</div>
+                    </div>
+                </div>
+                
+                <!-- 数据清除操作 -->
+                <div class="space-y-4">
+                    <h3 class="font-medium text-gray-900 dark:text-white">数据清除操作</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- 清空最近玩过 -->
+                        <div class="p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                            <h4 class="font-medium text-gray-900 dark:text-white mb-2">最近玩过记录</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                清空所有游戏历史记录和游玩次数统计
+                            </p>
+                            <button id="clear-recent-btn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-trash-alt mr-2"></i>清空最近玩过记录
+                            </button>
+                            <div id="recent-success" class="mt-2"></div>
+                        </div>
+                        
+                        <!-- 清空收藏 -->
+                        <div class="p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                            <h4 class="font-medium text-gray-900 dark:text-white mb-2">我的收藏记录</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                清空所有收藏的游戏列表
+                            </p>
+                            <button id="clear-favorites-btn" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-heart-broken mr-2"></i>清空我的收藏记录
+                            </button>
+                            <div id="favorites-success" class="mt-2"></div>
+                        </div>
+                        
+                        <!-- 清空游戏存档 -->
+                        <div class="p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                            <h4 class="font-medium text-gray-900 dark:text-white mb-2">所有游戏存档</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                清空所有游戏的本地存档数据
+                            </p>
+                            <button id="clear-saves-btn" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-save mr-2"></i>清空所有游戏存档
+                            </button>
+                            <div id="saves-success" class="mt-2"></div>
+                        </div>
+                        
+                        <!-- 清空所有数据 -->
+                        <div class="p-4 border-2 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                            <h4 class="font-medium text-red-900 dark:text-red-100 mb-2 flex items-center">
+                                <i class="fas fa-exclamation-triangle mr-2"></i>危险操作
+                            </h4>
+                            <p class="text-sm text-red-700 dark:text-red-300 mb-3">
+                                清空所有本地数据，包括主题设置
+                            </p>
+                            <button id="clear-all-data-btn" class="danger-btn w-full text-white py-2 px-4 rounded-lg font-medium">
+                                <i class="fas fa-bomb mr-2"></i>清空所有本地数据
+                            </button>
+                            <div id="all-data-success" class="mt-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 关于区域 -->
+            <div class="settings-card about-gradient rounded-lg p-6 text-white">
+                <div class="flex items-center mb-6">
+                    <i class="fas fa-info-circle text-white text-xl mr-3"></i>
+                    <h2 class="text-xl font-semibold">关于 轻游空间</h2>
+                </div>
+                
+                <div class="space-y-6">
+                    <!-- 平台介绍 -->
+                    <div>
+                        <p class="text-white/90 leading-relaxed">
+                            轻游空间（LitePlay Hub）是一个专为休闲玩家打造的轻量级Web游戏平台。
+                            我们致力于提供无需下载、即点即玩的优质游戏体验，让您在碎片化时间中享受纯粹的游戏乐趣。
+                        </p>
+                    </div>
+                    
+                    <!-- 版本信息 -->
+                    <div class="flex items-center space-x-4">
+                        <span class="text-white/80">当前版本：</span>
+                        <span class="version-badge px-3 py-1 rounded-full text-sm font-medium">
+                            v1.0.0
+                        </span>
+                        <span class="text-white/60 text-sm">
+                            发布日期：2024年12月
+                        </span>
+                    </div>
+                    
+                    <!-- 特色功能 -->
+                    <div>
+                        <h3 class="font-medium mb-3">✨ 平台特色</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                            <div class="flex items-center">
+                                <i class="fas fa-bolt text-yellow-300 mr-2"></i>
+                                <span>即点即玩，无需下载</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-shield-alt text-green-300 mr-2"></i>
+                                <span>隐私友好，数据本地</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-mobile-alt text-blue-300 mr-2"></i>
+                                <span>完美移动端适配</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-moon text-purple-300 mr-2"></i>
+                                <span>深色/浅色主题</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 开源信息 -->
+                    <div class="pt-4 border-t border-white/20">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0">
+                            <div>
+                                <h3 class="font-medium mb-1">🚀 开源项目</h3>
+                                <p class="text-white/80 text-sm">本项目基于 MIT 协议开源</p>
+                            </div>
+                            <a href="https://github.com/yourusername/liteplay-hub" 
+                               target="_blank" 
+                               class="github-link bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg flex items-center space-x-2 backdrop-blur-sm">
+                                <i class="fab fa-github"></i>
+                                <span>查看源码</span>
+                                <i class="fas fa-external-link-alt text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- 技术栈 -->
+                    <div class="text-center pt-4 border-t border-white/20">
+                        <p class="text-white/60 text-xs">
+                            Built with ❤️ using HTML5, CSS3, JavaScript & Tailwind CSS
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+    
+    <!-- Main JavaScript -->
+    <script src="js/main.js"></script>
+    
+    <!-- 设置页面专属JavaScript -->
+    <script>
+        // 获取DOM元素
+        const themeSwitch = document.getElementById('theme-switch');
+        const currentThemeText = document.getElementById('current-theme-text');
+        const lightPreview = document.getElementById('light-preview');
+        const darkPreview = document.getElementById('dark-preview');
+        
+        // 数据统计元素
+        const recentCount = document.getElementById('recent-count');
+        const favoritesCount = document.getElementById('favorites-count');
+        const savesCount = document.getElementById('saves-count');
+        
+        // 清除按钮
+        const clearRecentBtn = document.getElementById('clear-recent-btn');
+        const clearFavoritesBtn = document.getElementById('clear-favorites-btn');
+        const clearSavesBtn = document.getElementById('clear-saves-btn');
+        const clearAllDataBtn = document.getElementById('clear-all-data-btn');
+        
+        // 成功消息容器
+        const recentSuccess = document.getElementById('recent-success');
+        const favoritesSuccess = document.getElementById('favorites-success');
+        const savesSuccess = document.getElementById('saves-success');
+        const allDataSuccess = document.getElementById('all-data-success');
+        
+        // 初始化主题设置
+        function initializeThemeSettings() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            const isDark = currentTheme === 'dark';
+            
+            themeSwitch.checked = isDark;
+            updateThemeDisplay(isDark);
+            updateThemePreviews(isDark);
+        }
+        
+        // 更新主题显示
+        function updateThemeDisplay(isDark) {
+            currentThemeText.textContent = isDark ? '深色' : '浅色';
+            currentThemeText.className = isDark ? 'font-medium text-gray-300' : 'font-medium text-primary';
+        }
+        
+        // 更新主题预览
+        function updateThemePreviews(isDark) {
+            if (isDark) {
+                lightPreview.className = lightPreview.className.replace('border-primary', 'border-gray-200');
+                darkPreview.className = darkPreview.className.replace('border-gray-600', 'border-primary');
+            } else {
+                lightPreview.className = lightPreview.className.replace('border-gray-200', 'border-primary');
+                darkPreview.className = darkPreview.className.replace('border-primary', 'border-gray-600');
+            }
+        }
+        
+        // 主题切换事件
+        themeSwitch.addEventListener('change', function() {
+            const isDark = this.checked;
+            const newTheme = isDark ? 'dark' : 'light';
+            
+            // 更新localStorage
+            localStorage.setItem('theme', newTheme);
+            
+            // 更新全局主题
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            
+            // 同步导航栏主题按钮
+            const navThemeButton = document.getElementById('theme-toggle');
+            if (navThemeButton) {
+                const icon = navThemeButton.querySelector('i');
+                if (icon) {
+                    icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+                }
+            }
+            
+            // 更新显示
+            updateThemeDisplay(isDark);
+            updateThemePreviews(isDark);
+        });
+        
+        // 统计本地数据
+        function updateDataStatistics() {
+            // 最近玩过
+            const recentGames = JSON.parse(localStorage.getItem('recentlyPlayed')) || [];
+            recentCount.textContent = recentGames.length;
+            
+            // 收藏游戏
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favoritesCount.textContent = favorites.length;
+            
+            // 游戏存档（查找所有以save_或gameState_开头的键）
+            let saveCount = 0;
+            for (let key in localStorage) {
+                if (key.startsWith('save_') || key.startsWith('gameState_')) {
+                    saveCount++;
+                }
+            }
+            savesCount.textContent = saveCount;
+        }
+        
+        // 显示成功消息
+        function showSuccessMessage(container, message) {
+            container.innerHTML = `
+                <div class="success-message flex items-center text-green-600 dark:text-green-400 text-sm">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            
+            // 3秒后清除消息
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+        
+        // 清空最近玩过记录
+        clearRecentBtn.addEventListener('click', function() {
+            const isConfirmed = confirm(
+                '确定要清空最近玩过记录吗？\n\n这将删除：\n• 所有最近玩过的游戏记录\n• 所有游戏的游玩次数统计\n\n此操作不可恢复。'
+            );
+            
+            if (isConfirmed) {
+                // 清空最近玩过记录
+                localStorage.removeItem('recentlyPlayed');
+                
+                // 清空游戏统计数据
+                const keys = Object.keys(localStorage);
+                keys.forEach(key => {
+                    if (key.startsWith('gameStats_')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+                
+                updateDataStatistics();
+                showSuccessMessage(recentSuccess, '已清空最近玩过记录');
+            }
+        });
+        
+        // 清空收藏记录
+        clearFavoritesBtn.addEventListener('click', function() {
+            const favoritesData = JSON.parse(localStorage.getItem('favorites')) || [];
+            const count = favoritesData.length;
+            
+            const isConfirmed = confirm(
+                `确定要清空我的收藏记录吗？\n\n这将删除您收藏的 ${count} 款游戏。\n\n此操作不可恢复。`
+            );
+            
+            if (isConfirmed) {
+                localStorage.removeItem('favorites');
+                updateDataStatistics();
+                showSuccessMessage(favoritesSuccess, '已清空收藏记录');
+            }
+        });
+        
+        // 清空游戏存档
+        clearSavesBtn.addEventListener('click', function() {
+            // 统计存档数量
+            let saveCount = 0;
+            const saveKeys = [];
+            for (let key in localStorage) {
+                if (key.startsWith('save_') || key.startsWith('gameState_')) {
+                    saveCount++;
+                    saveKeys.push(key);
+                }
+            }
+            
+            const isConfirmed = confirm(
+                `确定要清空所有游戏存档吗？\n\n这将删除 ${saveCount} 个游戏存档文件。\n\n此操作不可恢复。`
+            );
+            
+            if (isConfirmed) {
+                saveKeys.forEach(key => {
+                    localStorage.removeItem(key);
+                });
+                
+                updateDataStatistics();
+                showSuccessMessage(savesSuccess, `已清空 ${saveCount} 个游戏存档`);
+            }
+        });
+        
+        // 清空所有本地数据
+        clearAllDataBtn.addEventListener('click', function() {
+            const totalKeys = Object.keys(localStorage).length;
+            
+            const isConfirmed = confirm(
+                `⚠️ 危险操作警告 ⚠️\n\n确定要清空所有本地数据吗？\n\n这将删除：\n• 所有最近玩过的记录\n• 所有收藏的游戏\n• 所有游戏存档\n• 主题偏好设置\n• 其他所有本地数据\n\n共计 ${totalKeys} 项数据将被永久删除。\n\n此操作不可恢复！`
+            );
+            
+            if (isConfirmed) {
+                // 二次确认
+                const doubleConfirmed = confirm(
+                    '最后确认：您确定要执行此危险操作吗？\n\n所有数据将被永久删除且无法恢复！'
+                );
+                
+                if (doubleConfirmed) {
+                    // 清空所有localStorage数据
+                    localStorage.clear();
+                    
+                    // 重置为默认主题
+                    localStorage.setItem('theme', 'light');
+                    document.documentElement.classList.remove('dark');
+                    
+                    // 重新初始化页面
+                    initializeThemeSettings();
+                    updateDataStatistics();
+                    
+                    showSuccessMessage(allDataSuccess, `已清空所有本地数据（${totalKeys} 项）`);
+                    
+                    // 3秒后刷新页面
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                }
+            }
+        });
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeThemeSettings();
+            updateDataStatistics();
+        });
+        
+        // 监听localStorage变化，实时更新统计
+        window.addEventListener('storage', function(e) {
+            updateDataStatistics();
+        });
+    </script>
+</body>
+</html> 

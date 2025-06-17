@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap location (when available)
+Sitemap: https://pommotion.github.io/liteplay_hub/sitemap.xml
+
+# Allow access to CSS and JS files
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /js/
+
+# Allow access to game assets
+Allow: /assets/games/
+
+# Optimize crawl delay for search engines
+Crawl-delay: 1
+
+# Block access to source files and documentation
+Disallow: /*.md$
+Disallow: /test_report.md
+Disallow: /cursor_initialize_liteplay_hub_project.md
+Disallow: /.cursorrules
+Disallow: /.gitignore 

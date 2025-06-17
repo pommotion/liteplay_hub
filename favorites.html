@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的收藏 - 轻游空间 (LitePlay Hub)</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        accent: '#F59E0B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Global Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .game-card {
+            transition: all 0.3s ease;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .dark .game-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .favorite-game-card {
+            position: relative;
+            overflow: visible;
+        }
+        
+        .favorite-game-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, #EF4444, #F59E0B, #EF4444);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            background-size: 200% 200%;
+            animation: favoriteGradient 3s ease infinite;
+        }
+        
+        .favorite-game-card:hover::before {
+            opacity: 1;
+        }
+        
+        @keyframes favoriteGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .favorite-icon {
+            color: #EF4444;
+            filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.4));
+            transition: all 0.3s ease;
+        }
+        
+        .favorite-icon:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.6));
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .fade-out {
+            animation: fadeOut 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+        
+        .remove-animation {
+            animation: removeCard 0.4s ease-in-out forwards;
+        }
+        
+        @keyframes removeCard {
+            0% {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.95) rotateY(90deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.9) rotateY(180deg);
+                height: 0;
+                margin: 0;
+                padding: 0;
+            }
+        }
+        
+        .floating-heart {
+            animation: floatingHeart 2s ease-in-out infinite;
+        }
+        
+        @keyframes floatingHeart {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pulse-love {
+            animation: pulseLove 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulseLove {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+        <div class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-gamepad text-2xl text-primary"></i>
+                    <a href="index.html" class="text-xl font-bold text-gray-900 dark:text-white hover:text-primary transition-colors">轻游空间</a>
+                    <span class="text-sm text-gray-500 dark:text-gray-400 hidden sm:inline">LitePlay Hub</span>
+                </div>
+                
+                <!-- 右侧导航 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 搜索框 -->
+                    <div class="hidden md:flex items-center space-x-2">
+                        <div class="relative">
+                            <input type="text" id="search-input" placeholder="搜索游戏..." 
+                                   class="w-64 pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <button id="search-button" class="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 导航链接 -->
+                    <div class="flex items-center space-x-4">
+                        <a href="categories.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-th-large"></i>
+                            <span class="hidden sm:inline">分类</span>
+                        </a>
+                        <a href="recent.html" class="flex items-center space-x-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-history"></i>
+                            <span class="hidden sm:inline">最近</span>
+                        </a>
+                        <a href="favorites.html" class="flex items-center space-x-1 text-red-500 font-medium">
+                            <i class="fas fa-heart floating-heart"></i>
+                            <span class="hidden sm:inline">收藏</span>
+                        </a>
+                        
+                        <!-- 主题切换按钮 -->
+                        <button id="theme-toggle" class="p-2 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- 页面标题 -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                <i class="fas fa-heart text-red-500 mr-3 floating-heart"></i>我的收藏
+            </h1>
+            <nav class="text-sm text-gray-600 dark:text-gray-400">
+                <a href="index.html" class="hover:text-primary transition-colors">首页</a>
+                <span class="mx-2">/</span>
+                <span>我的收藏</span>
+            </nav>
+        </div>
+
+        <!-- 移动端搜索框 -->
+        <div class="md:hidden mb-6">
+            <div class="relative">
+                <input type="text" id="mobile-search-input" placeholder="搜索游戏..." 
+                       class="w-full pl-10 pr-12 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <button id="mobile-search-button" class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 收藏统计信息 -->
+        <div class="mb-8" id="stats-section">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                            收藏的游戏
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            共收藏了 <span id="total-favorites" class="font-medium text-red-500">0</span> 款游戏
+                        </p>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <!-- 排序选项 -->
+                        <select id="sort-order" class="px-3 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                            <option value="default">默认顺序</option>
+                            <option value="name">游戏名称</option>
+                            <option value="category">游戏分类</option>
+                        </select>
+                        
+                        <!-- 分类筛选 -->
+                        <select id="category-filter" class="px-3 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                            <option value="all">全部分类</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 游戏列表展示区 -->
+        <div id="games-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 fade-in">
+            <!-- 游戏卡片将在此动态生成 -->
+        </div>
+
+        <!-- 无收藏游戏提示 -->
+        <div id="no-favorites" class="text-center py-16" style="display: none;">
+            <div class="max-w-md mx-auto">
+                <div class="pulse-love">
+                    <i class="fas fa-heart text-6xl text-gray-300 dark:text-gray-600 mb-6"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">您还没有收藏任何游戏</h3>
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    发现喜欢的游戏时，点击爱心按钮收藏它们，就可以在这里快速找到并继续游玩。
+                </p>
+                <div class="space-y-2 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
+                    <a href="index.html" class="inline-block bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+                        <i class="fas fa-gamepad mr-2"></i>发现游戏
+                    </a>
+                    <a href="categories.html" class="inline-block bg-red-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors">
+                        <i class="fas fa-heart mr-2"></i>浏览分类
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    
+    <!-- Main JavaScript -->
+    <script src="js/main.js"></script>
+    
+    <!-- 收藏页面专属JavaScript -->
+    <script>
+        let favoriteGames = [];
+        let allCategories = [];
+        
+        // 删除重复的createFavoriteGameCard函数，统一使用main.js中的generateGameCard函数
+        
+        // 删除重复的startGame函数，使用main.js中的全局函数
+        
+        // 移除收藏功能
+        function removeFavorite(gameId, buttonElement) {
+            // 显示确认对话框
+            const game = getGameById(gameId);
+            const gameName = game ? game.name : '该游戏';
+            
+            const isConfirmed = confirm(`确定要取消收藏 "${gameName}" 吗？`);
+            
+            if (isConfirmed) {
+                // 从收藏列表中移除
+                let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                favorites = favorites.filter(id => id !== gameId);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                
+                // 添加移除动画并移除卡片
+                const gameCard = buttonElement.closest('.favorite-game-card');
+                if (gameCard) {
+                    gameCard.classList.add('remove-animation');
+                    
+                    // 动画完成后移除元素并重新渲染
+                    setTimeout(() => {
+                        renderFavoriteGames();
+                        showNotification(`已取消收藏 "${gameName}"`, 'success');
+                    }, 400);
+                }
+            }
+        }
+        
+        // 加载收藏的游戏
+        function loadFavoriteGames() {
+            const favoriteIds = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            // 根据ID查找对应的游戏数据
+            favoriteGames = favoriteIds.map(id => getGameById(id)).filter(game => game !== null);
+            
+            return favoriteGames;
+        }
+        
+        // 获取所有分类
+        function getAllCategories() {
+            const categories = [...new Set(favoriteGames.map(game => game.category))].sort();
+            return categories;
+        }
+        
+        // 更新分类筛选器
+        function updateCategoryFilter() {
+            const categoryFilter = document.getElementById('category-filter');
+            const categories = getAllCategories();
+            
+            // 清空现有选项（保留"全部分类"）
+            categoryFilter.innerHTML = '<option value="all">全部分类</option>';
+            
+            // 添加分类选项
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+        
+        // 应用筛选和排序
+        function applyFiltersAndSorting(games) {
+            let filteredGames = [...games];
+            
+            // 应用分类筛选
+            const categoryFilter = document.getElementById('category-filter').value;
+            if (categoryFilter !== 'all') {
+                filteredGames = filteredGames.filter(game => game.category === categoryFilter);
+            }
+            
+            // 应用排序
+            const sortOrder = document.getElementById('sort-order').value;
+            switch (sortOrder) {
+                case 'name':
+                    filteredGames.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+                    break;
+                case 'category':
+                    filteredGames.sort((a, b) => {
+                        const categoryCompare = a.category.localeCompare(b.category, 'zh-CN');
+                        return categoryCompare !== 0 ? categoryCompare : a.name.localeCompare(b.name, 'zh-CN');
+                    });
+                    break;
+                case 'default':
+                default:
+                    // 保持原始顺序（即收藏的顺序）
+                    break;
+            }
+            
+            return filteredGames;
+        }
+        
+        // 渲染收藏游戏列表
+        function renderFavoriteGames() {
+            const gamesContainer = document.getElementById('games-container');
+            const noFavoritesDiv = document.getElementById('no-favorites');
+            const statsSection = document.getElementById('stats-section');
+            
+            const games = loadFavoriteGames();
+            const filteredGames = applyFiltersAndSorting(games);
+            
+            if (games.length === 0) {
+                // 显示无收藏提示
+                gamesContainer.style.display = 'none';
+                noFavoritesDiv.style.display = 'block';
+                statsSection.style.display = 'none';
+            } else {
+                // 更新统计信息
+                updateStats(games, filteredGames);
+                
+                // 更新分类筛选器
+                updateCategoryFilter();
+                
+                if (filteredGames.length === 0) {
+                    // 显示筛选后无结果
+                    gamesContainer.innerHTML = `
+                        <div class="col-span-full text-center py-12">
+                            <i class="fas fa-filter text-4xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">没有找到符合条件的游戏</h3>
+                            <p class="text-gray-600 dark:text-gray-400">尝试调整筛选条件或排序方式</p>
+                        </div>
+                    `;
+                } else {
+                    // 渲染游戏卡片 - 使用main.js中的统一函数
+                    gamesContainer.innerHTML = filteredGames.map(game => generateGameCard(game, { showStats: true })).join('');
+                }
+                
+                gamesContainer.style.display = 'grid';
+                noFavoritesDiv.style.display = 'none';
+                statsSection.style.display = 'block';
+                
+                // 添加淡入动画
+                gamesContainer.classList.remove('fade-in');
+                setTimeout(() => gamesContainer.classList.add('fade-in'), 10);
+            }
+        }
+        
+        // 更新统计信息
+        function updateStats(allGames, filteredGames) {
+            const totalFavorites = allGames.length;
+            const displayedGames = filteredGames.length;
+            
+            document.getElementById('total-favorites').textContent = totalFavorites;
+            
+            // 如果有筛选，显示筛选后的数量
+            const statsText = document.querySelector('#stats-section p');
+            if (allGames.length !== filteredGames.length) {
+                statsText.innerHTML = `
+                    共收藏了 <span class="font-medium text-red-500">${totalFavorites}</span> 款游戏，
+                    当前显示 <span class="font-medium text-primary">${displayedGames}</span> 款
+                `;
+            } else {
+                statsText.innerHTML = `
+                    共收藏了 <span class="font-medium text-red-500">${totalFavorites}</span> 款游戏
+                `;
+            }
+        }
+        
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+            
+            if (type === 'success') {
+                notification.className += ' bg-green-500 text-white';
+                notification.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${message}`;
+            } else if (type === 'info') {
+                notification.className += ' bg-blue-500 text-white';
+                notification.innerHTML = `<i class="fas fa-info-circle mr-2"></i>${message}`;
+            } else if (type === 'warning') {
+                notification.className += ' bg-yellow-500 text-white';
+                notification.innerHTML = `<i class="fas fa-exclamation-triangle mr-2"></i>${message}`;
+            }
+            
+            document.body.appendChild(notification);
+            
+            // 显示动画
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // 3秒后自动消失
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // 初始化收藏页面
+        function initializeFavoritesPage() {
+            // 渲染收藏游戏列表
+            renderFavoriteGames();
+            
+            // 添加排序和筛选事件监听器
+            document.getElementById('sort-order').addEventListener('change', renderFavoriteGames);
+            document.getElementById('category-filter').addEventListener('change', renderFavoriteGames);
+            
+            // 添加移动端搜索功能
+            const mobileSearchInput = document.getElementById('mobile-search-input');
+            const mobileSearchButton = document.getElementById('mobile-search-button');
+            
+            if (mobileSearchInput) {
+                mobileSearchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        performMobileSearch();
+                    }
+                });
+            }
+            
+            if (mobileSearchButton) {
+                mobileSearchButton.addEventListener('click', performMobileSearch);
+            }
+        }
+        
+        // 移动端搜索
+        function performMobileSearch() {
+            const mobileSearchInput = document.getElementById('mobile-search-input');
+            if (mobileSearchInput) {
+                const query = mobileSearchInput.value.trim();
+                if (query) {
+                    const encodedQuery = encodeURIComponent(query);
+                    window.location.href = `search.html?query=${encodedQuery}`;
+                }
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化主题切换
+            if (typeof initThemeToggle === 'function') {
+                initThemeToggle();
+            }
+            
+            // 使用main.js中的收藏页面初始化函数
+            if (typeof initFavoritesPage === 'function') {
+                initFavoritesPage();
+            } else {
+                // 如果main.js还没加载，使用本地函数
+                initializeFavoritesPage();
+            }
+        });
+        
+        // 监听存储变化，实时更新页面
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'favorites') {
+                renderFavoriteGames();
+            }
+        });
+    </script>
+</body>
+</html> 
