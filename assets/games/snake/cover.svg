@@ -1,0 +1,87 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景渐变 -->
+  <defs>
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#2ed573;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e3c72;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="snakeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7bed9f;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2ed573;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e3c72;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="400" height="300" fill="url(#bgGradient)"/>
+  
+  <!-- 游戏边框 -->
+  <rect x="40" y="60" width="320" height="180" fill="rgba(0,0,0,0.2)" stroke="rgba(255,255,255,0.3)" stroke-width="2" rx="10"/>
+  
+  <!-- 网格点 -->
+  <g fill="rgba(255,255,255,0.1)">
+    <circle cx="80" cy="100" r="2"/>
+    <circle cx="120" cy="100" r="2"/>
+    <circle cx="160" cy="100" r="2"/>
+    <circle cx="200" cy="100" r="2"/>
+    <circle cx="240" cy="100" r="2"/>
+    <circle cx="280" cy="100" r="2"/>
+    <circle cx="320" cy="100" r="2"/>
+    
+    <circle cx="80" cy="140" r="2"/>
+    <circle cx="120" cy="140" r="2"/>
+    <circle cx="160" cy="140" r="2"/>
+    <circle cx="200" cy="140" r="2"/>
+    <circle cx="240" cy="140" r="2"/>
+    <circle cx="280" cy="140" r="2"/>
+    <circle cx="320" cy="140" r="2"/>
+    
+    <circle cx="80" cy="180" r="2"/>
+    <circle cx="120" cy="180" r="2"/>
+    <circle cx="160" cy="180" r="2"/>
+    <circle cx="200" cy="180" r="2"/>
+    <circle cx="240" cy="180" r="2"/>
+    <circle cx="280" cy="180" r="2"/>
+    <circle cx="320" cy="180" r="2"/>
+  </g>
+  
+  <!-- 贪吃蛇身体 -->
+  <g fill="url(#snakeGradient)" stroke="#fff" stroke-width="2">
+    <!-- 蛇头 -->
+    <circle cx="240" cy="140" r="18"/>
+    <!-- 蛇眼 -->
+    <circle cx="235" cy="135" r="3" fill="#000"/>
+    <circle cx="245" cy="135" r="3" fill="#000"/>
+    <!-- 蛇鼻 -->
+    <ellipse cx="240" cy="145" rx="2" ry="1" fill="#000"/>
+    
+    <!-- 蛇身 -->
+    <circle cx="200" cy="140" r="16"/>
+    <circle cx="160" cy="140" r="15"/>
+    <circle cx="120" cy="140" r="14"/>
+    <circle cx="120" cy="180" r="13"/>
+    <circle cx="160" cy="180" r="12"/>
+    <circle cx="200" cy="180" r="11"/>
+    <circle cx="240" cy="180" r="10"/>
+  </g>
+  
+  <!-- 食物 (苹果) -->
+  <g transform="translate(280, 100)">
+    <circle cx="0" cy="0" r="12" fill="#ff4757"/>
+    <ellipse cx="-3" cy="-8" rx="2" ry="1" fill="#2f3640"/>
+    <path d="M 0 -12 Q -5 -15 -8 -10" stroke="#2ed573" stroke-width="2" fill="none"/>
+  </g>
+  
+  <!-- 游戏标题 -->
+  <text x="200" y="35" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">贪吃蛇</text>
+  
+  <!-- 分数显示 -->
+  <text x="50" y="280" fill="rgba(255,255,255,0.8)" font-family="Arial, sans-serif" font-size="14">Score: 2870</text>
+  
+  <!-- 装饰星星 -->
+  <g fill="rgba(255,255,255,0.6)">
+    <path d="M 30 30 L 32 36 L 38 36 L 33 40 L 35 46 L 30 42 L 25 46 L 27 40 L 22 36 L 28 36 Z"/>
+    <path d="M 370 40 L 372 46 L 378 46 L 373 50 L 375 56 L 370 52 L 365 56 L 367 50 L 362 46 L 368 46 Z"/>
+    <path d="M 50 260 L 52 266 L 58 266 L 53 270 L 55 276 L 50 272 L 45 276 L 47 270 L 42 266 L 48 266 Z"/>
+  </g>
+</svg> 

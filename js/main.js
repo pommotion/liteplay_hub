@@ -43,7 +43,7 @@ const allGames = [
         description: '经典的俄罗斯方块游戏，考验你的空间思维和反应速度',
         category: '益智',
         categoryColor: 'blue',
-        imageUrl: 'assets/games/tetris/cover.jpg',
+        imageUrl: 'assets/games/tetris/cover.svg',
         gameUrl: 'game.html?game=tetris',
         gameFileUrl: 'assets/games/tetris/index.html'
     },
@@ -53,7 +53,7 @@ const allGames = [
         description: '童年回忆的贪吃蛇游戏，简单易上手，让人停不下来',
         category: '休闲',
         categoryColor: 'green',
-        imageUrl: 'assets/games/snake/cover.jpg',
+        imageUrl: 'assets/games/snake/cover.svg',
         gameUrl: 'game.html?game=snake',
         gameFileUrl: 'assets/games/snake/index.html'
     },
@@ -63,7 +63,7 @@ const allGames = [
         description: '挑战你的逻辑思维，通过移动数字块完成排序',
         category: '益智',
         categoryColor: 'blue',
-        imageUrl: 'assets/games/puzzle/cover.jpg',
+        imageUrl: 'assets/games/puzzle/cover.svg',
         gameUrl: 'game.html?game=puzzle',
         gameFileUrl: 'assets/games/puzzle/index.html'
     },
@@ -73,7 +73,7 @@ const allGames = [
         description: '控制小鸟穿越障碍物，挑战你的反应极限',
         category: '动作',
         categoryColor: 'red',
-        imageUrl: 'assets/games/flappy/cover.jpg',
+        imageUrl: 'assets/games/flappy/cover.svg',
         gameUrl: 'game.html?game=flappy',
         gameFileUrl: 'assets/games/flappy/index.html'
     }

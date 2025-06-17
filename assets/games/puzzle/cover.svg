@@ -1,0 +1,112 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景渐变 -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pieceGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff9a9e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fecfef;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pieceGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a8edea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fed6e3;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pieceGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffecd2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fcb69f;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pieceGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a8c0ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3f2b96;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="400" height="300" fill="url(#bgGradient)"/>
+  
+  <!-- 拼图边框 -->
+  <rect x="60" y="60" width="280" height="180" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.3)" stroke-width="2" rx="10"/>
+  
+  <!-- 拼图块 -->
+  <g stroke="#fff" stroke-width="2">
+    <!-- 第一行 -->
+    <g transform="translate(80, 80)">
+      <!-- 块1 -->
+      <path d="M 0 0 L 60 0 L 60 60 L 0 60 Z" fill="url(#pieceGradient1)"/>
+      <text x="30" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">1</text>
+      
+      <!-- 块2 -->
+      <path d="M 60 0 L 120 0 L 120 60 L 60 60 Z" fill="url(#pieceGradient2)"/>
+      <text x="90" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">2</text>
+      
+      <!-- 块3 -->
+      <path d="M 120 0 L 180 0 L 180 60 L 120 60 Z" fill="url(#pieceGradient3)"/>
+      <text x="150" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">3</text>
+      
+      <!-- 块4 -->
+      <path d="M 180 0 L 240 0 L 240 60 L 180 60 Z" fill="url(#pieceGradient4)"/>
+      <text x="210" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">4</text>
+    </g>
+    
+    <!-- 第二行 -->
+    <g transform="translate(80, 140)">
+      <!-- 块5 -->
+      <path d="M 0 0 L 60 0 L 60 60 L 0 60 Z" fill="url(#pieceGradient4)"/>
+      <text x="30" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">5</text>
+      
+      <!-- 块6 -->
+      <path d="M 60 0 L 120 0 L 120 60 L 60 60 Z" fill="url(#pieceGradient1)"/>
+      <text x="90" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">6</text>
+      
+      <!-- 块7 -->
+      <path d="M 120 0 L 180 0 L 180 60 L 120 60 Z" fill="url(#pieceGradient2)"/>
+      <text x="150" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">7</text>
+      
+      <!-- 空白块 -->
+      <rect x="180" y="0" width="60" height="60" fill="rgba(255,255,255,0.2)" stroke-dasharray="5,5"/>
+    </g>
+    
+    <!-- 第三行 -->
+    <g transform="translate(80, 200)">
+      <!-- 块9 -->
+      <path d="M 0 0 L 60 0 L 60 60 L 0 60 Z" fill="url(#pieceGradient2)"/>
+      <text x="30" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">9</text>
+      
+      <!-- 块10 -->
+      <path d="M 60 0 L 120 0 L 120 60 L 60 60 Z" fill="url(#pieceGradient3)"/>
+      <text x="90" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">10</text>
+      
+      <!-- 块11 -->
+      <path d="M 120 0 L 180 0 L 180 60 L 120 60 Z" fill="url(#pieceGradient4)"/>
+      <text x="150" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">11</text>
+      
+      <!-- 块8 (错位放置) -->
+      <path d="M 180 0 L 240 0 L 240 60 L 180 60 Z" fill="url(#pieceGradient3)"/>
+      <text x="210" y="35" text-anchor="middle" fill="white" font-family="Arial" font-size="20" font-weight="bold">8</text>
+    </g>
+  </g>
+  
+  <!-- 游戏标题 -->
+  <text x="200" y="35" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">数字拼图</text>
+  
+  <!-- 移动提示箭头 -->
+  <g fill="rgba(255,255,255,0.7)">
+    <path d="M 340 170 L 350 180 L 340 190 L 345 185 L 355 185 L 355 175 L 345 175 Z"/>
+  </g>
+  
+  <!-- 步数显示 -->
+  <text x="50" y="280" fill="rgba(255,255,255,0.8)" font-family="Arial, sans-serif" font-size="14">Steps: 23</text>
+  
+  <!-- 装饰性元素 -->
+  <g fill="rgba(255,255,255,0.3)">
+    <circle cx="30" cy="30" r="8"/>
+    <circle cx="370" cy="30" r="6"/>
+    <circle cx="30" cy="270" r="10"/>
+    <circle cx="370" cy="270" r="8"/>
+  </g>
+  
+  <!-- 目标提示 -->
+  <text x="350" y="280" fill="rgba(255,255,255,0.6)" font-family="Arial, sans-serif" font-size="12">Goal: 1-15</text>
+</svg> 
