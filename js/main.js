@@ -1,5 +1,40 @@
 // Main JavaScript file for LitePlay Hub
 
+// ==================== 基础路径配置 ====================
+
+// 检测并设置基础路径
+function getBasePath() {
+    // 如果是GitHub Pages环境，需要加上仓库名
+    const hostname = window.location.hostname;
+    const pathname = window.location.pathname;
+    
+    // GitHub Pages环境检测
+    if (hostname === 'pommotion.github.io' && pathname.startsWith('/liteplay_hub/')) {
+        return '/liteplay_hub/';
+    }
+    
+    // 本地开发环境或其他环境
+    return '/';
+}
+
+// 修正路径函数
+function getCorrectPath(relativePath) {
+    const basePath = getBasePath();
+    
+    // 如果是绝对路径，直接返回
+    if (relativePath.startsWith('/') || relativePath.startsWith('http')) {
+        return relativePath;
+    }
+    
+    // 确保基础路径正确
+    if (basePath === '/') {
+        return relativePath;
+    }
+    
+    // GitHub Pages环境下，需要确保路径包含仓库名
+    return basePath + relativePath;
+}
+
 // 游戏数据定义
 const allGames = [
     {
@@ -436,8 +471,9 @@ function generateGameCard(game, options = {}) {
     return `
         <div class="game-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:scale-105 border border-gray-200 dark:border-gray-700" data-game-id="${game.id}">
             <div class="game-image relative">
-                <img src="${game.imageUrl}" alt="${game.name}" loading="lazy" 
-                     class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110">
+                <img src="${getCorrectPath(game.imageUrl)}" alt="${game.name}" loading="lazy" 
+                     class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110" 
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDIwMCAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIxOTIiIGZpbGw9IiNGM0Y0RjYiLz48cGF0aCBkPSJNODcgODhIOTNWOTRIODdWODhaIiBmaWxsPSIjOUNBM0FGIi8+PGNpcmNsZSBjeD0iMTAwIiBjeT0iOTYiIHI9IjIwIiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjEwMCIgeT0iMTQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM5Q0EzQUYiPua4uOaIj+WKoOi9veWksei0pTwvdGV4dD48L3N2Zz4='">
                 ${showFavorite ? `
                     <button class="favorite-btn absolute top-3 right-3 w-9 h-9 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-red-500 hover:scale-110 transition-all duration-200 ${isFavorite ? 'text-red-500' : ''}" 
                             data-action="favorite" data-game-id="${game.id}">
@@ -531,6 +567,25 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
+// 调试函数 - 帮助诊断路径问题
+function debugGameLaunch(gameId) {
+    console.log('=== 游戏启动调试信息 ===');
+    console.log('当前URL:', window.location.href);
+    console.log('当前hostname:', window.location.hostname);
+    console.log('当前pathname:', window.location.pathname);
+    console.log('检测的基础路径:', getBasePath());
+    console.log('游戏ID:', gameId);
+    
+    const originalGameUrl = `game.html?game=${gameId}`;
+    const correctedGameUrl = getCorrectPath(originalGameUrl);
+    
+    console.log('原始游戏URL:', originalGameUrl);
+    console.log('修正后的游戏URL:', correctedGameUrl);
+    console.log('=== 调试信息结束 ===');
+    
+    return correctedGameUrl;
+}
+
 // 开始游戏函数
 function startGame(gameId) {
     console.log('startGame被调用，游戏ID:', gameId);
@@ -540,18 +595,19 @@ function startGame(gameId) {
         RecentGamesManager.addRecentGame(gameId);
         console.log('已记录到最近玩过');
         
-        // 跳转到游戏页面 - 使用最简单可靠的方法
-        const gameUrl = `game.html?game=${gameId}`;
-        console.log('准备跳转到:', gameUrl);
+        // 调试路径问题
+        const gameUrl = debugGameLaunch(gameId);
         
         // 使用location.assign而不是直接设置href，更可靠
+        console.log('准备跳转到:', gameUrl);
         window.location.assign(gameUrl);
     } catch (error) {
         console.error('startGame函数执行出错:', error);
         
         // 备用跳转方法
         try {
-            const gameUrl = `game.html?game=${gameId}`;
+            const gameUrl = getCorrectPath(`game.html?game=${gameId}`);
+            console.log('使用备用跳转方法:', gameUrl);
             window.open(gameUrl, '_self');
         } catch (backupError) {
             console.error('备用跳转方法也失败:', backupError);

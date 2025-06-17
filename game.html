@@ -307,7 +307,9 @@
             // 创建iframe
             gameIframe = document.createElement('iframe');
             gameIframe.className = 'game-iframe';
-            gameIframe.src = game.gameFileUrl || `assets/games/${game.id}/index.html`;
+            // 使用路径修正函数
+            const gameFileUrl = game.gameFileUrl || `assets/games/${game.id}/index.html`;
+            gameIframe.src = (typeof getCorrectPath === 'function') ? getCorrectPath(gameFileUrl) : gameFileUrl;
             gameIframe.allowFullscreen = true;
             gameIframe.allow = 'autoplay; fullscreen; microphone; camera';
             
